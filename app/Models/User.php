@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Role;
 use App\Models\BiodataUser;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -20,6 +22,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'role_id',
         'name',
         'email',
         'password',
@@ -51,5 +54,13 @@ class User extends Authenticatable
     public function biodatauser(): HasOne
     {
         return $this->hasOne(BiodataUser::class, 'user_id');
+    }
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

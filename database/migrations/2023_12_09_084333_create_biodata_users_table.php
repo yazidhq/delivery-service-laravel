@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('biodata_users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('role');
             $table->string('nomor_wa');
             $table->string('kelamin');
             $table->string('alamat');
