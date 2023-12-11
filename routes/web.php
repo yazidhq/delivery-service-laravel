@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\auth\AuthenticateController;
 
 /*
@@ -17,6 +18,8 @@ use App\Http\Controllers\auth\AuthenticateController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('/barang', BarangController::class);
 
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Armada;
 use App\Models\Kategori;
 use App\Models\TitikAntar;
 use Illuminate\Database\Eloquent\Model;
@@ -20,22 +21,19 @@ class Barang extends Model
     protected $fillable = [
         'titikantar_id',
         'kategori_id',
+        'armada_id',
         'nomor_resi',
         'nama_barang',
         'deskripsi',
-        'berat_kg',
-        'lebar_cm',
-        'panjang_cm',
-        'tinggi_cm',
         'nama_pengirim',
+        'nama_penerima',
         'nomor_penerima',
         'lokasi_penerima',
         'tanggal_pengiriman',
-        'status_pengiriman',
     ];
 
     /**
-     * Get the post that owns the comment.
+     * Get the Titik antar that owns the barang.
      */
     public function titikantar(): BelongsTo
     {
@@ -43,10 +41,41 @@ class Barang extends Model
     }
 
     /**
-     * Get the post that owns the comment.
+     * Get the Kategori that owns the barang.
      */
     public function kategori(): BelongsTo
     {
         return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
+
+    /**
+     * Get the Armada that owns the barang.
+     */
+    public function armada(): BelongsTo
+    {
+        return $this->belongsTo(Armada::class, 'armada_id');
+    }
+
+    /**
+     * Generate a random and unique 15-digit nomor_resi.
+     */
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($barang) {
+            $barang->nomor_resi = self::generateUniqueNomorResi();
+        });
+    }
+
+    /**
+     * Generate a unique 15-digit nomor_resi.
+     */
+    protected static function generateUniqueNomorResi(): int
+    {
+        $nomorResi = mt_rand(100000000000000, 999999999999999);
+        while (static::where('nomor_resi', $nomorResi)->exists()) {
+            $nomorResi = mt_rand(100000000000000, 999999999999999);
+        }
+        return $nomorResi;
     }
 }

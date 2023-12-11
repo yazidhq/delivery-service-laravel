@@ -15,19 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('titikantar_id');
             $table->foreignId('kategori_id');
+            $table->foreignId('armada_id');
             $table->string('nomor_resi');
             $table->string('nama_barang');
             $table->string('deskripsi');
-            $table->string('berat_kg');
-            $table->string('lebar_cm');
-            $table->string('panjang_cm');
-            $table->string('tinggi_cm');
             $table->string('nama_pengirim');
             $table->string('nama_penerima');
             $table->string('nomor_penerima');
             $table->string('lokasi_penerima');
             $table->string('tanggal_pengiriman');
-            $table->string('status_pengiriman');
             $table->timestamps();
         });
     }

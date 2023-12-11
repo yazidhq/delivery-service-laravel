@@ -9,7 +9,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
@@ -43,15 +43,9 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Barang & Titik Antar
+        Titik Antar
     </div>
     <!-- Stuff Management -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Kategori Barang</span>
-        </a>
-    </li>
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
@@ -69,10 +63,16 @@
     </div>
 
     <!-- Nav Item - Charts -->
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('barang.index') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Barang Masuk</span>
+        </a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Barang Masuk</span>
+            <span>Kategori Barang</span>
         </a>
     </li>
 

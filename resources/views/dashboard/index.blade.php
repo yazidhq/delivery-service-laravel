@@ -23,10 +23,10 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Barang Masuk</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">40</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            {{-- <i class="fas fa-calendar fa-2x text-gray-300"></i> --}}
                         </div>
                     </div>
                 </div>
@@ -41,10 +41,10 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Barang Dalam Perjalanan</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">20</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            {{-- <i class="fas fa-dollar-sign fa-2x text-gray-300"></i> --}}
                         </div>
                     </div>
                 </div>
@@ -62,12 +62,12 @@
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">120</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            {{-- <i class="fas fa-clipboard-list fa-2x text-gray-300"></i> --}}
                         </div>
                     </div>
                 </div>
@@ -86,22 +86,24 @@
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th>Resi</th>
+                                <th>Barang</th>
+                                <th>Nama Penerima</th>
+                                <th>Tujuan</th>
+                                <th>Tanggal Pengiriman</th>
+                                <th>Status Pengiriman</th>
+                                <th>Armada</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Tiger Nixon</td>
+                                <td>124873098434</td>
                                 <td>System Architect</td>
                                 <td>Edinburgh</td>
-                                <td>61</td>
+                                <td>Bandung</td>
                                 <td>2011-04-25</td>
-                                <td>$320,800</td>
+                                <td>Dalam perjalanan</td>
+                                <td>Mobil: B 8908 RSG</td>
                             </tr>
                         </tbody>
                     </table>
