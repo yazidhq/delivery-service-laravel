@@ -30,6 +30,7 @@ class Barang extends Model
         'nomor_penerima',
         'lokasi_penerima',
         'tanggal_pengiriman',
+        'is_perjalanan',
     ];
 
     /**

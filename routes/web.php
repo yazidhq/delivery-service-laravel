@@ -27,6 +27,9 @@ Route::resource('/kategori', KategoriController::class);
 Route::resource('/armada', ArmadaController::class);
 Route::resource('/titikantar', TitikAntarController::class);
 
+// change is_perjalanan to true or false
+Route::put('/update-is-perjalanan/{id}', [BarangController::class, 'updateIsPerjalanan'])->name('update-is-perjalanan');
+
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');

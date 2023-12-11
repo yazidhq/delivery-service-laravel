@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('nomor_penerima');
             $table->string('lokasi_penerima');
             $table->string('tanggal_pengiriman');
+            $table->boolean('is_perjalanan')->default(0);
             $table->timestamps();
         });
     }

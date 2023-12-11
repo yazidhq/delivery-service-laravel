@@ -95,7 +95,7 @@ class BarangController extends Controller
         ]);
 
         Barang::where('id', $id)->update($data);
-        
+
         return redirect()->route('barang.index');
     }
 
@@ -107,5 +107,28 @@ class BarangController extends Controller
         $barang = Barang::where('id', $id)->firstOrFail();
         $barang->delete();
         return redirect()->route('barang.index');
+    }
+
+    public function updateIsPerjalanan($id)
+    {
+        $barang = Barang::find($id);
+
+        if($barang->is_perjalanan == 0){
+            if ($barang) {
+                $barang->is_perjalanan = true;
+                $barang->save();
+                return redirect()->back()->with('success', 'Berhasil mengubah is_perjalanan');
+            } else {
+                return redirect()->back()->with('error', 'Barang tidak ditemukan');
+            }
+        }else {
+            if ($barang) {
+                $barang->is_perjalanan = false;
+                $barang->save();
+                return redirect()->back()->with('success', 'Berhasil mengubah is_perjalanan');
+            } else {
+                return redirect()->back()->with('error', 'Barang tidak ditemukan');
+            }
+        }
     }
 }

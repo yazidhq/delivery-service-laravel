@@ -30,6 +30,7 @@
                                 <th>Tanggal Pengiriman</th>
                                 <th>Armada</th>
                                 <th>Status Pengiriman</th>
+                                <th>Status Perjalanan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -41,7 +42,26 @@
                                 <td>{{ $barang->lokasi_penerima }}</td>
                                 <td>{{ $barang->tanggal_pengiriman }}</td>
                                 <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
-                                <td>{{ $barang->titikantar->kota }}</td>
+                                <td>
+                                    @if ($barang->is_perjalanan == 0)
+                                    Di titik antar: {{ $barang->titikantar->kota }} 
+                                    @else
+                                    Dalam Perjalanan
+                                    @endif
+                                </td>
+                                <td>
+                                    <form action="{{ route('update-is-perjalanan', ['id' => $barang->id]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            @if ($barang->is_perjalanan == 0)
+                                                ubah jadi dalam perjalanan
+                                            @else
+                                                ubah jadi di titik antar
+                                            @endif
+                                        </button>
+                                    </form>
+                                </td>
                                 <td>
                                     <div class="input-group mb-3">
                                         <form action="{{ route('barang.destroy', $barang->id) }}" method="POST">
@@ -142,9 +162,36 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a class="btn btn-sm btn-primary rounded-2">
+                                        <button class="btn btn-sm btn-primary mx-1 rounded-2" data-toggle="modal" data-target="#lihatModal{{ $kategori->id }}">
                                             <i class="bi bi-eye"></i>
-                                        </a>
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="lihatModal{{ $barang->id }}" tabindex="-1" role="dialog" aria-labelledby="lihatModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="lihatModalLabel">Detail Barang</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item"><strong>Nomor Resi : </strong>{{ $barang->nomor_resi }}</li>
+                                                            <li class="list-group-item"><strong>Nama Barang : </strong>{{ $barang->nama_barang }}</li>
+                                                            <li class="list-group-item"><strong>Deskripsi : </strong>{{ $barang->deskripsi }}</li>
+                                                            <li class="list-group-item"><strong>Tanggal Kirim : </strong>{{ $barang->tanggal_pengiriman }}</li>
+                                                            <li class="list-group-item"><strong>Jenis Barang : </strong>{{ $barang->kategori->nama_kategori }}</li>
+                                                            <li class="list-group-item"><strong>Armada Pengiriman : </strong>{{ $barang->armada->nama_kendaraan }}</li>
+                                                            <li class="list-group-item"><strong>Tujuan : </strong>{{ $barang->lokasi_penerima }}</li>
+                                                            <li class="list-group-item"><strong>Nama Pengirim : </strong>{{ $barang->nama_pengirim }}</li>
+                                                            <li class="list-group-item"><strong>Nama Penerima : </strong>{{ $barang->nama_penerima }}</li>
+                                                            <li class="list-group-item"><strong>Nomor Penerima : </strong>{{ $barang->nomor_penerima }}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <a class="btn btn-sm btn-success rounded-2 mx-1">
                                             <i class="bi bi-printer"></i>
                                         </a>
