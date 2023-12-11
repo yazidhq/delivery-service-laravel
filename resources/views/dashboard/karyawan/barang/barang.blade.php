@@ -24,7 +24,7 @@
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Resi</th>
+                                <th>Nomor Resi</th>
                                 <th>Barang</th>
                                 <th>Tujuan</th>
                                 <th>Tanggal Pengiriman</th>
@@ -40,7 +40,7 @@
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->lokasi_penerima }}</td>
                                 <td>{{ $barang->tanggal_pengiriman }}</td>
-                                <td>{{ $barang->armada->nama_kendaraan }}</td>
+                                <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
                                 <td>{{ $barang->titikantar->kota }}</td>
                                 <td>
                                     <div class="input-group mb-3">
@@ -65,23 +65,89 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{-- <form action="{{ route('armada.update', $armada->id) }}" method="POST">
+                                                        <form action="{{ route('barang.update', $barang->id) }}" method="POST">
                                                             @csrf
                                                             @method('PUT')
-                                                            <div class="form-group">
-                                                                <label for="nama_kendaraan">Jenis Kendaraan</label>
-                                                                <input type="text" class="form-control" id="nama_kendaraan" name="nama_kendaraan" value="{{ $armada->nama_kendaraan }}">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <div class="mb-3">
+                                                                        <label for="nama_barang" class="form-label">Nama Barang</label>
+                                                                        <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ $barang->nama_barang }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="deskripsi" class="form-label">Deskripsi Barang</label>
+                                                                        <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="{{ $barang->deskripsi }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="kategori_id" class="form-label">Jenis/ Kategori Barang</label>
+                                                                        <select name="kategori_id" class="form-control">
+                                                                            <option hidden value="{{ $barang->kategori_id }}">{{ $barang->kategori->nama_kategori }}</option>
+                                                                            @foreach ($kategoris as $kategori)
+                                                                            <option value="{{ $kategori->id }}" {{ old('kategori_id')==$kategori->id ? 'selected' : '' }}>
+                                                                                {{ $kategori->nama_kategori }}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="tanggal_pengiriman" class="form-label">Tanggal Pengiriman</label>
+                                                                        <input type="date" class="form-control" id="tanggal_pengiriman" name="tanggal_pengiriman" value="{{ $barang->tanggal_pengiriman }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="armada_id" class="form-label">Armada Pengiriman</label>
+                                                                        <select name="armada_id" class="form-control">
+                                                                            <option hidden value="{{ $barang->armada_id }}">{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</option>
+                                                                            @foreach ($armadas as $armada)
+                                                                            <option value="{{ $armada->id }}" {{ old('armada_id')==$armada->id ? 'selected' : '' }}>
+                                                                                {{ $armada->nama_kendaraan }}: {{ $armada->plat_nomor }}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="mb-3">
+                                                                        <label for="nama_pengirim" class="form-label">Nama Pengirim</label>
+                                                                        <input type="text" class="form-control" id="nama_pengirim" name="nama_pengirim" value="{{ $barang->nama_pengirim }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="nama_penerima" class="form-label">Nama Penerima</label>
+                                                                        <input type="text" class="form-control" id="nama_penerima" name="nama_penerima" value="{{ $barang->nama_penerima }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="nomor_penerima" class="form-label">Nomor Penerima</label>
+                                                                        <input type="text" class="form-control" id="nomor_penerima" name="nomor_penerima" value="{{ $barang->nomor_penerima }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="lokasi_penerima" class="form-label">Tujuan (Lokasi Penerima)</label>
+                                                                        <input type="text" class="form-control" id="lokasi_penerima" name="lokasi_penerima" value="{{ $barang->lokasi_penerima }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="titikantar_id" class="form-label">Status Pengiriman</label>
+                                                                        <select name="titikantar_id" class="form-control">
+                                                                            <option value="{{ $barang->titikantar_id }}">Barang berada di titik antar: {{ $barang->titikantar->kota }}</option>
+                                                                            @foreach ($titikantars as $titikantar)
+                                                                            <option value="{{ $titikantar->id }}" {{ old('titikantar_id')==$titikantar->id ? 'selected' : '' }}>
+                                                                                Barang berada di titik antar: {{ $titikantar->kota }}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label for="plat_nomor">Plat Nomor</label>
-                                                                <input type="text" class="form-control" id="plat_nomor" name="plat_nomor" value="{{ $armada->plat_nomor }}">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary">Update</button>
-                                                        </form> --}}
+                                                            
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <a class="btn btn-sm btn-primary rounded-2">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-success rounded-2 mx-1">
+                                            <i class="bi bi-printer"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

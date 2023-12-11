@@ -83,7 +83,7 @@
                                         <option value="">Pilih Status</option>
                                         @foreach ($titikantars as $titikantar)
                                         <option value="{{ $titikantar->id }}" {{ old('titikantar_id')==$titikantar->id ? 'selected' : '' }}>
-                                            Barang berada di titik antar {{ $titikantar->kota }}
+                                            Barang berada di titik antar: {{ $titikantar->kota }}
                                         </option>
                                         @endforeach
                                     </select>

@@ -17,6 +17,9 @@ class BarangController extends Controller
     {
         $data = [
             'barangs' => Barang::all(),
+            'kategoris' => Kategori::all(),
+            'armadas' => Armada::all(),
+            'titikantars' => TitikAntar::all(),
         ];
         return view('dashboard.karyawan.barang.barang', $data);
     }
@@ -78,7 +81,22 @@ class BarangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $this->validate($request, [
+            'nama_barang' => 'required',
+            'deskripsi' => 'required',
+            'kategori_id' => 'required',
+            'tanggal_pengiriman' => 'required',
+            'armada_id' => 'required',
+            'nama_pengirim' => 'required',
+            'nama_penerima' => 'required',
+            'nomor_penerima' => 'required',
+            'lokasi_penerima' => 'required',
+            'titikantar_id' => 'required',
+        ]);
+
+        Barang::where('id', $id)->update($data);
+        
+        return redirect()->route('barang.index');
     }
 
     /**
