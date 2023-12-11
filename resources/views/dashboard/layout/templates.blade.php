@@ -25,6 +25,9 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('dashboard-assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    {{-- Bootstrap Icon --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
 </head>
 
 <body id="page-top">
@@ -90,7 +93,7 @@
         $(document).ready(function() {
             $('#example').DataTable({
             "columnDefs": [
-                { "orderable": false, "targets": 5 }
+                { "orderable": false, "targets": 1 }
             ],
             language: {
                 'paginate': {

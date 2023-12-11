@@ -43,13 +43,19 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Titik Antar
+        Titik Antar & Armada
     </div>
     <!-- Stuff Management -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+    <li class="nav-item  {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('titikantar.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Titik Antar</span>
+        </a>
+    </li>
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'armada') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('armada.index') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Armada Pengantaran</span>
         </a>
     </li>
 
@@ -69,8 +75,8 @@
             <span>Barang Masuk</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'kategori') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kategori.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Kategori Barang</span>
         </a>

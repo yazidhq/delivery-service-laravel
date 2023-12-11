@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArmadaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\auth\AuthenticateController;
+use App\Http\Controllers\TitikAntarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +23,9 @@ Route::get('/', function () {
 });
 
 Route::resource('/barang', BarangController::class);
+Route::resource('/kategori', KategoriController::class);
+Route::resource('/armada', ArmadaController::class);
+Route::resource('/titikantar', TitikAntarController::class);
 
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');

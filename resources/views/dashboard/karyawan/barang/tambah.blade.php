@@ -34,8 +34,15 @@
                                     <textarea type="text" class="form-control" id="deskripsi" name="deskripsi"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="kategori_id" class="form-label">Jenis Barang</label>
-                                    <input type="text" class="form-control" id="kategori_id" name="kategori_id">
+                                    <label for="kategori_id" class="form-label">Jenis/ Kategori Barang</label>
+                                    <select name="kategori_id" class="form-control">
+                                        <option value="">Pilih Jenis Barang</option>
+                                        @foreach ($kategoris as $kategori)
+                                        <option value="{{ $kategori->id }}" {{ old('kategori_id')==$kategori->id ? 'selected' : '' }}>
+                                            {{ $kategori->nama_kategori }}
+                                        </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="tanggal_pengiriman" class="form-label">Tanggal Pengiriman</label>
@@ -43,7 +50,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="armada_id" class="form-label">Armada Pengiriman</label>
-                                    <input type="text" class="form-control" id="armada_id" name="armada_id" placeholder="Bisa diisi nanti">
+                                    <select name="armada_id" class="form-control">
+                                        <option value="">Pilih Armada</option>
+                                        @foreach ($armadas as $armada)
+                                        <option value="{{ $armada->id }}" {{ old('armada_id')==$armada->id ? 'selected' : '' }}>
+                                            {{ $armada->nama_kendaraan }}: {{ $armada->plat_nomor }}
+                                        </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col">
@@ -65,7 +79,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="titikantar_id" class="form-label">Status Pengiriman</label>
-                                    <input type="text" class="form-control" id="titikantar_id" name="titikantar_id">
+                                    <select name="titikantar_id" class="form-control">
+                                        <option value="">Pilih Status</option>
+                                        @foreach ($titikantars as $titikantar)
+                                        <option value="{{ $titikantar->id }}" {{ old('titikantar_id')==$titikantar->id ? 'selected' : '' }}>
+                                            Barang berada di titik antar {{ $titikantar->kota }}
+                                        </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

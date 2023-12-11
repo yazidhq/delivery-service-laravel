@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Armada;
 use App\Models\Barang;
+use App\Models\Kategori;
+use App\Models\TitikAntar;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
@@ -23,7 +26,12 @@ class BarangController extends Controller
      */
     public function create()
     {
-        return view('dashboard.karyawan.barang.tambah');
+        $data = [
+            'kategoris' => Kategori::all(),
+            'armadas' => Armada::all(),
+            'titikantars' => TitikAntar::all(),
+        ];
+        return view('dashboard.karyawan.barang.tambah', $data);
     }
 
     /**
@@ -36,7 +44,7 @@ class BarangController extends Controller
             'deskripsi' => 'required',
             'kategori_id' => 'required',
             'tanggal_pengiriman' => 'required',
-            'armada_id' => '',
+            'armada_id' => 'required',
             'nama_pengirim' => 'required',
             'nama_penerima' => 'required',
             'nomor_penerima' => 'required',
@@ -78,6 +86,8 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $barang = Barang::where('id', $id)->firstOrFail();
+        $barang->delete();
+        return redirect()->route('barang.index');
     }
 }
