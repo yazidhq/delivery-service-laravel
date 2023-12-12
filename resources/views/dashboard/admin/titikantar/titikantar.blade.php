@@ -111,7 +111,7 @@
                                 <td>{{ $titikantar->kontak_nomor }}</td>
                                 <td>
                                     <div class="input-group mb-3">
-                                        <form action="{{ route('titikantar.destroy', $titikantar->id) }}" method="POST">
+                                        <form action="{{ route('titikantar.destroy', $titikantar->id) }}" method="POST" class="deleteForm">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger rounded-2">

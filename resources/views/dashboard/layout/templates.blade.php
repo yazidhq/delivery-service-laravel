@@ -116,6 +116,46 @@
         } );
     </script>
 
+    {{-- sweet alert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- delete sweet alert --}}
+    <script>
+    class DeleteConfirmation {
+        constructor(formClass) {
+            this.forms = document.querySelectorAll('.' + formClass);
+            this.init();
+        }
+
+        init() {
+            this.forms.forEach((form) => {
+                form.addEventListener('submit', this.handleFormSubmit.bind(this));
+            });
+        }
+
+        handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            Swal.fire({
+                title: 'Hapus data ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, Delete It!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        new DeleteConfirmation('deleteForm');
+    });
+    </script>
+
 </body>
 
 </html>

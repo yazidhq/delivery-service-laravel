@@ -61,7 +61,7 @@
                                 <td>{{ $kategori->deskripsi }}</td>
                                 <td>
                                     <div class="input-group mb-3">
-                                        <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST">
+                                        <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" class="deleteForm">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger rounded-2">

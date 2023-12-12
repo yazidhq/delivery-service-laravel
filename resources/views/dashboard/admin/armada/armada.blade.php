@@ -61,7 +61,7 @@
                                 <td>{{ $armada->plat_nomor }}</td>
                                 <td>
                                     <div class="input-group mb-3">
-                                        <form action="{{ route('armada.destroy', $armada->id) }}" method="POST">
+                                        <form action="{{ route('armada.destroy', $armada->id) }}" method="POST" class="deleteForm">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger rounded-2">

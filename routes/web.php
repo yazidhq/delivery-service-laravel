@@ -28,11 +28,11 @@ Route::resource('/kategori', KategoriController::class)->middleware('auth');
 Route::resource('/armada', ArmadaController::class)->middleware('auth');
 Route::resource('/titikantar', TitikAntarController::class)->middleware('auth');
 
-// change is_perjalanan to true or false
-Route::put('/update-is-perjalanan/{id}', [BarangController::class, 'updateIsPerjalanan'])->name('update-is-perjalanan')->middleware('auth');
-
 // update titik_antar
 Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAntar'])->name('update-titik-antar')->middleware('auth');
+
+// update status perjalanan
+Route::put('/update-status/{id}', [BarangController::class, 'updateStatus'])->name('update-status')->middleware('auth');
 
 // creating pdf surat jalan barang
 Route::get('/surat-jalan/{id}', [BarangController::class, 'generateSuratJalan'])->name('surat-jalan');

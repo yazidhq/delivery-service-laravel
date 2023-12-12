@@ -43,58 +43,62 @@
                                 <th>Tujuan</th>
                                 <th>Tanggal Pengiriman</th>
                                 <th>Armada</th>
-                                <th>Barang berada di</th>
+                                <th>Posisi Barang</th>
                                 <th>Status Perjalanan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($barangs as $barang)
-                            <tr>
+                            <tr class="@if($barang->is_sampai && !$barang->is_perjalanan) border-success @elseif(!$barang->is_sampai && $barang->is_perjalanan) border-warning @elseif(!$barang->is_sampai && !$barang->is_perjalanan) border-primary @endif">
                                 <td>{{ $barang->nomor_resi }}</td>
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->lokasi_penerima }}</td>
                                 <td>{{ $barang->tanggal_pengiriman->format('d-m-Y') }}</td>
                                 <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
                                 <td>
-                                    @if ($barang->is_perjalanan == 0)
-                                    <form action="{{ route('update-titik-antar', ['id' => $barang->id]) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="titikantar_id" class="form-control" onchange="this.form.submit()">
-                                            <option value="{{ $barang->titikantar_id }}">{{ $barang->titikantar->kota }}</option>
-                                            @foreach ($titikantars as $titikantar)
-                                                <option value="{{ $titikantar->id }}">{{ $titikantar->kota }}</option>
-                                            @endforeach
+                                    @if ($barang->is_sampai && !$barang->is_perjalanan)
+                                        <select class="form-control" disabled>
+                                            <option>Diterima</option>
                                         </select>
-                                    </form>                                    
-                                    @else
-                                    <button class="btn btn-light" disabled>Dalam Perjalanan</button>
+                                    @elseif(!$barang->is_sampai && $barang->is_perjalanan)
+                                        <select class="form-control" disabled>
+                                            <option>Perjalanan</option>
+                                        </select>
+                                    @elseif(!$barang->is_sampai && !$barang->is_perjalanan)
+                                        <form action="{{ route('update-titik-antar', ['id' => $barang->id]) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="titikantar_id" class="form-control" onchange="this.form.submit()">
+                                                <option hidden value="{{ $barang->titikantar_id }}">{{ $barang->titikantar->kota }}</option>
+                                                @foreach ($titikantars as $titikantar)
+                                                    <option value="{{ $titikantar->id }}">{{ $titikantar->kota }}</option>
+                                                @endforeach
+                                            </select>
+                                        </form>
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('update-is-perjalanan', ['id' => $barang->id]) }}" method="POST">
+                                    <form action="{{ route('update-status', ['id' => $barang->id]) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn btn-light">
-                                            @if ($barang->is_perjalanan == 0)
-                                                ubah jadi dalam perjalanan
-                                            @else
-                                                ubah jadi di titik antar
-                                            @endif
-                                        </button>
+                                        <select name="status" class="form-control" onchange="this.form.submit()">
+                                            <option value="sudah_diterima" @if ($barang->is_sampai && !$barang->is_perjalanan) selected @endif>Barang sudah diterima</option>
+                                            <option value="dalam_perjalanan" @if (!$barang->is_sampai && $barang->is_perjalanan) selected @endif>Barang dalam perjalanan</option>
+                                            <option value="di_titik_antar" @if (!$barang->is_sampai && !$barang->is_perjalanan) selected @endif>Barang di titik antar</option>
+                                        </select>
                                     </form>
                                 </td>
                                 <td>
                                     <div class="input-group mb-3">
-                                        <form action="{{ route('barang.destroy', $barang->id) }}" method="POST">
+                                        <form action="{{ route('barang.destroy', $barang->id) }}" method="POST" class="deleteForm">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-danger rounded-2">
+                                            <button class="btn btn-sm btn-danger rounded-2 mx-1 my-1">
                                                 <i class="bi bi-trash3-fill"></i>
                                             </button>
                                         </form>
-                                        <button class="btn btn-sm btn-warning mx-1 rounded-2" data-toggle="modal" data-target="#editModal{{ $barang->id }}">
+                                        <button class="btn btn-sm btn-warning mx-1 my-1 rounded-2" data-toggle="modal" data-target="#editModal{{ $barang->id }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
                                         <!-- Modal -->
@@ -186,7 +190,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-sm btn-primary rounded-2" data-toggle="modal" data-target="#lihatModal{{ $barang->id }}">
+                                        <button class="btn btn-sm btn-primary rounded-2 mx-1 my-1" data-toggle="modal" data-target="#lihatModal{{ $barang->id }}">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                         <!-- Modal -->
@@ -216,7 +220,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ route('surat-jalan', ['id' => $barang->id]) }}" class="btn btn-sm btn-success rounded-2 mx-1" target="_blank">
+                                        <a href="{{ route('surat-jalan', ['id' => $barang->id]) }}" class="btn btn-sm btn-success rounded-2 mx-1 my-1" target="_blank">
                                             <i class="bi bi-printer"></i>
                                         </a>                                        
                                     </div>

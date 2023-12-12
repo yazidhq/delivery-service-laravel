@@ -96,7 +96,10 @@ class AuthenticateController extends Controller
     {
         $data = [
             'title' => 'Dashboard',
-            'barangs' => Barang::all()
+            'barangs' => Barang::all(),
+            'barang_masuk' => Barang::where(function($query) {$query->where('is_perjalanan', 0)->where('is_sampai', 0);})->count(),
+            'barang_perjalanan' => Barang::where(function($query) {$query->where('is_perjalanan', 1)->where('is_sampai', 0);})->count(),
+            'barang_sampai' => Barang::where(function($query) {$query->where('is_perjalanan', 0)->where('is_sampai', 1);})->count(),
         ];
 
         if (Auth::check()) {

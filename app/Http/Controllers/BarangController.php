@@ -115,32 +115,6 @@ class BarangController extends Controller
     }
 
     /**
-     * Change status of is_perjalanan
-     */
-    public function updateIsPerjalanan($id)
-    {
-        $barang = Barang::find($id);
-
-        if($barang->is_perjalanan == 0){
-            if ($barang) {
-                $barang->is_perjalanan = true;
-                $barang->save();
-                return redirect()->back()->with('success', 'Berhasil mengubah Status Perjalanan');
-            } else {
-                return redirect()->back()->with('error', 'Barang tidak ditemukan');
-            }
-        }else {
-            if ($barang) {
-                $barang->is_perjalanan = false;
-                $barang->save();
-                return redirect()->back()->with('success', 'Berhasil mengubah Status Perjalanan');
-            } else {
-                return redirect()->back()->with('error', 'Barang tidak ditemukan');
-            }
-        }
-    }
-
-    /**
      * Update status perjalanan (titikantar_id)
      */
     public function updateTitikAntar(Request $request, $id)
@@ -150,6 +124,31 @@ class BarangController extends Controller
         $barang->save();
 
         return redirect()->back()->with('success', 'Titik Antar berhasil diperbarui');
+    }
+
+    /**
+     * Change status of is_perjalanan & is_sampai
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        $status = $request->input('status');
+
+        if ($status === 'sudah_diterima') {
+            $barang->is_sampai = true;
+            $barang->is_perjalanan = false;
+        } elseif ($status === 'dalam_perjalanan') {
+            $barang->is_sampai = false;
+            $barang->is_perjalanan = true;
+        } elseif ($status === 'di_titik_antar') {
+            $barang->is_sampai = false;
+            $barang->is_perjalanan = false;
+        }
+
+        $barang->save();
+
+        return redirect()->back()->with('success', 'Status barang berhasil diperbarui');
     }
 
     /**
