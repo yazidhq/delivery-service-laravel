@@ -7,6 +7,8 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\TitikAntar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class BarangController extends Controller
 {
@@ -148,5 +150,28 @@ class BarangController extends Controller
         $barang->save();
 
         return redirect()->back()->with('success', 'Titik Antar berhasil diperbarui');
+    }
+
+    /**
+     * Creating pdf surat jalan barang
+     */
+    public function generateSuratJalan($id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        $pdf = App::make('dompdf.wrapper');
+
+        // Configure DomPDF
+        $pdf->getDomPDF()->set_option("isHtml5ParserEnabled", true);
+        $pdf->getDomPDF()->set_option("isPhpEnabled", true);
+
+        // Load view
+        $pdf->loadView('surat-jalan', compact('barang'));
+
+        // Set paper orientation to landscape
+        $pdf->setPaper('A4', 'landscape');
+
+        // Stream the PDF to the browser
+        return $pdf->stream('surat-jalan-'.$barang->id.'.pdf');
     }
 }

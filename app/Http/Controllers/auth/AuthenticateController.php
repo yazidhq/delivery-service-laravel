@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\auth;
 
 use App\Models\User;
+use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -94,7 +95,8 @@ class AuthenticateController extends Controller
     public function dashboard()
     {
         $data = [
-            'title' => 'Dashboard'
+            'title' => 'Dashboard',
+            'barangs' => Barang::all()
         ];
 
         if (Auth::check()) {

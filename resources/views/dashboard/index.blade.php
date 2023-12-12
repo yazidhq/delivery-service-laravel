@@ -86,25 +86,31 @@
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Resi</th>
+                                <th>Nomor Resi</th>
                                 <th>Barang</th>
-                                <th>Nama Penerima</th>
                                 <th>Tujuan</th>
                                 <th>Tanggal Pengiriman</th>
-                                <th>Status Pengiriman</th>
                                 <th>Armada</th>
+                                <th>Status Perjalanan</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($barangs as $barang)
                             <tr>
-                                <td>124873098434</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>Bandung</td>
-                                <td>2011-04-25</td>
-                                <td>Dalam perjalanan</td>
-                                <td>Mobil: B 8908 RSG</td>
+                                <td>{{ $barang->nomor_resi }}</td>
+                                <td>{{ $barang->nama_barang }}</td>
+                                <td>{{ $barang->lokasi_penerima }}</td>
+                                <td>{{ $barang->tanggal_pengiriman->format('d-m-Y') }}</td>
+                                <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
+                                <td>
+                                    @if ($barang->is_perjalanan == 0)
+                                    Barang berada di {{ Str::ucfirst($barang->titikantar->kota) }}                                   
+                                    @else
+                                    Barang dalam perjalanan
+                                    @endif
+                                </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

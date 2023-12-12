@@ -186,7 +186,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-sm btn-primary mx-1 rounded-2" data-toggle="modal" data-target="#lihatModal{{ $barang->id }}">
+                                        <button class="btn btn-sm btn-primary rounded-2" data-toggle="modal" data-target="#lihatModal{{ $barang->id }}">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                         <!-- Modal -->
@@ -216,9 +216,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a class="btn btn-sm btn-success rounded-2 mx-1">
+                                        <a href="{{ route('surat-jalan', ['id' => $barang->id]) }}" class="btn btn-sm btn-success rounded-2 mx-1" target="_blank">
                                             <i class="bi bi-printer"></i>
-                                        </a>
+                                        </a>                                        
                                     </div>
                                 </td>
                             </tr>
