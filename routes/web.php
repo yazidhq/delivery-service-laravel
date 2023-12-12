@@ -22,16 +22,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/barang', BarangController::class);
-Route::resource('/kategori', KategoriController::class);
-Route::resource('/armada', ArmadaController::class);
-Route::resource('/titikantar', TitikAntarController::class);
+// resource all of controller
+Route::resource('/barang', BarangController::class)->middleware('auth');
+Route::resource('/kategori', KategoriController::class)->middleware('auth');
+Route::resource('/armada', ArmadaController::class)->middleware('auth');
+Route::resource('/titikantar', TitikAntarController::class)->middleware('auth');
 
 // change is_perjalanan to true or false
-Route::put('/update-is-perjalanan/{id}', [BarangController::class, 'updateIsPerjalanan'])->name('update-is-perjalanan');
+Route::put('/update-is-perjalanan/{id}', [BarangController::class, 'updateIsPerjalanan'])->name('update-is-perjalanan')->middleware('auth');
 
 // update titik_antar
-Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAntar'])->name('update-titik-antar');
+Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAntar'])->name('update-titik-antar')->middleware('auth');
 
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');

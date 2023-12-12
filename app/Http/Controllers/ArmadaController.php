@@ -12,10 +12,13 @@ class ArmadaController extends Controller
      */
     public function index()
     {
-        $data = [
-            'armadas' => Armada::all(),
-        ];
-        return view('dashboard.admin.armada.armada', $data);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = [
+                'armadas' => Armada::all(),
+            ];
+            return view('dashboard.admin.armada.armada', $data);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -31,14 +34,15 @@ class ArmadaController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'nama_kendaraan' => 'required',
-            'plat_nomor' => 'required'
-        ]);
-
-        Armada::create($data);
-
-        return redirect()->route('armada.index')->with(['success' => 'Berhasil menambah Armada Kendaraan']);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_kendaraan' => 'required',
+                'plat_nomor' => 'required'
+            ]);
+            Armada::create($data);
+            return redirect()->route('armada.index')->with(['success' => 'Berhasil menambah Armada Kendaraan']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -62,14 +66,15 @@ class ArmadaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->validate($request, [
-            'nama_kendaraan' => 'required',
-            'plat_nomor' => 'required'
-        ]);
-
-        Armada::where('id', $id)->update($data);
-
-        return redirect()->route('armada.index')->with(['success' => 'Berhasil merubah Armada Kendaraan']);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_kendaraan' => 'required',
+                'plat_nomor' => 'required'
+            ]);
+            Armada::where('id', $id)->update($data);
+            return redirect()->route('armada.index')->with(['success' => 'Berhasil merubah Armada Kendaraan']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -77,11 +82,14 @@ class ArmadaController extends Controller
      */
     public function destroy(string $id)
     {
-        $armada = Armada::where('id', $id)->firstOrFail();
-        foreach ($armada->barang as $barang) {
-            $barang->delete();
+        if(auth()->user()->role->nama == 'admin'){
+            $armada = Armada::where('id', $id)->firstOrFail();
+            foreach ($armada->barang as $barang) {
+                $barang->delete();
+            }
+            $armada->delete();
+            return redirect()->route('armada.index')->with(['success' => 'Berhasil menghapus Armada Kendaraan']);
         }
-        $armada->delete();
-        return redirect()->route('armada.index')->with(['success' => 'Berhasil menghapus Armada Kendaraan']);
+        return redirect()->route('dashboard');
     }
 }

@@ -20,6 +20,13 @@
         </div>
     @endif
 
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Terdapat field edit kosong..
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Content Row -->
     <div class="row">
         <div class="col-lg-12 mb-4">
@@ -128,7 +135,7 @@
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="tanggal_pengiriman" class="form-label">Tanggal Pengiriman</label>
-                                                                        <input type="date" class="form-control" id="tanggal_pengiriman" name="tanggal_pengiriman" value="{{ $barang->tanggal_pengiriman }}">
+                                                                        <input type="date" class="form-control" id="tanggal_pengiriman" name="tanggal_pengiriman" value="{{ old('tanggal_pengiriman', $barang->tanggal_pengiriman ? \Carbon\Carbon::parse($barang->tanggal_pengiriman)->toDateString() : '') }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="armada_id" class="form-label">Armada Pengiriman</label>

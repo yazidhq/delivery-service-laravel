@@ -12,10 +12,13 @@ class TitikAntarController extends Controller
      */
     public function index()
     {
-        $data = [
-            'titikantars' => TitikAntar::all(),
-        ];
-        return view('dashboard.admin.titikantar.titikantar', $data);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = [
+                'titikantars' => TitikAntar::all(),
+            ];
+            return view('dashboard.admin.titikantar.titikantar', $data);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -31,17 +34,20 @@ class TitikAntarController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'kota' => 'required',
-            'kode_pos' => 'required',
-            'alamat_lengkap' => 'required',
-            'kontak_nama' => 'required',
-            'kontak_nomor' => 'required'
-        ]);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'kota' => 'required',
+                'kode_pos' => 'required',
+                'alamat_lengkap' => 'required',
+                'kontak_nama' => 'required',
+                'kontak_nomor' => 'required'
+            ]);
 
-        TitikAntar::create($data);
+            TitikAntar::create($data);
 
-        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menambah Titik Antar (Check Point)']);
+            return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menambah Titik Antar (Check Point)']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -65,17 +71,20 @@ class TitikAntarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->validate($request, [
-            'kota' => 'required',
-            'kode_pos' => 'required',
-            'alamat_lengkap' => 'required',
-            'kontak_nama' => 'required',
-            'kontak_nomor' => 'required'
-        ]);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'kota' => 'required',
+                'kode_pos' => 'required',
+                'alamat_lengkap' => 'required',
+                'kontak_nama' => 'required',
+                'kontak_nomor' => 'required'
+            ]);
 
-        TitikAntar::where('id', $id)->update($data);
+            TitikAntar::where('id', $id)->update($data);
 
-        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil merubah Titik Antar (Check Point)']);
+            return redirect()->route('titikantar.index')->with(['success' => 'Berhasil merubah Titik Antar (Check Point)']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -83,11 +92,14 @@ class TitikAntarController extends Controller
      */
     public function destroy(string $id)
     {
-        $titikantar = TitikAntar::where('id', $id)->firstOrFail();
-        foreach ($titikantar->barang as $barang) {
-            $barang->delete();
+        if(auth()->user()->role->nama == 'admin'){
+            $titikantar = TitikAntar::where('id', $id)->firstOrFail();
+            foreach ($titikantar->barang as $barang) {
+                $barang->delete();
+            }
+            $titikantar->delete();
+            return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menghapus Titik Antar (Check Point)']);
         }
-        $titikantar->delete();
-        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menghapus Titik Antar (Check Point)']);
+        return redirect()->route('dashboard');
     }
 }

@@ -85,7 +85,7 @@ class BarangController extends Controller
             'nama_barang' => 'required',
             'deskripsi' => 'required',
             'kategori_id' => 'required',
-            'tanggal_pengiriman' => 'nullable',
+            'tanggal_pengiriman' => 'required',
             'armada_id' => 'required',
             'nama_pengirim' => 'required',
             'nama_penerima' => 'required',
