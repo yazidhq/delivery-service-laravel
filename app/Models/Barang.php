@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Armada;
 use App\Models\Kategori;
 use App\Models\TitikAntar;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -78,5 +79,13 @@ class Barang extends Model
             $nomorResi = mt_rand(100000000000000, 999999999999999);
         }
         return $nomorResi;
+    }
+
+    /**
+     * Get format date for d-m-y
+     */
+    public function getTanggalPengirimanAttribute($value)
+    {
+        return Carbon::parse($value);
     }
 }

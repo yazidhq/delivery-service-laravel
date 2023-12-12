@@ -57,7 +57,7 @@ class BarangController extends Controller
 
         Barang::create($data);
 
-        return redirect()->route('barang.index');
+        return redirect()->route('barang.index')->with(['success' => 'Berhasil memasukkan Barang']);
     }
 
     /**
@@ -85,18 +85,21 @@ class BarangController extends Controller
             'nama_barang' => 'required',
             'deskripsi' => 'required',
             'kategori_id' => 'required',
-            'tanggal_pengiriman' => 'required',
+            'tanggal_pengiriman' => 'nullable',
             'armada_id' => 'required',
             'nama_pengirim' => 'required',
             'nama_penerima' => 'required',
             'nomor_penerima' => 'required',
             'lokasi_penerima' => 'required',
             'titikantar_id' => 'required',
+            'is_perjalanan' => 'required',
         ]);
 
-        Barang::where('id', $id)->update($data);
+        $barang = Barang::findOrFail($id);
 
-        return redirect()->route('barang.index');
+        $barang->update($data);
+
+        return redirect()->route('barang.index')->with(['success' => 'Berhasil merubah data Barang']);
     }
 
     /**
@@ -106,9 +109,12 @@ class BarangController extends Controller
     {
         $barang = Barang::where('id', $id)->firstOrFail();
         $barang->delete();
-        return redirect()->route('barang.index');
+        return redirect()->route('barang.index')->with(['success' => 'Berhasil menghapus Barang']);
     }
 
+    /**
+     * Change status of is_perjalanan
+     */
     public function updateIsPerjalanan($id)
     {
         $barang = Barang::find($id);
@@ -117,7 +123,7 @@ class BarangController extends Controller
             if ($barang) {
                 $barang->is_perjalanan = true;
                 $barang->save();
-                return redirect()->back()->with('success', 'Berhasil mengubah is_perjalanan');
+                return redirect()->back()->with('success', 'Berhasil mengubah Status Perjalanan');
             } else {
                 return redirect()->back()->with('error', 'Barang tidak ditemukan');
             }
@@ -125,10 +131,22 @@ class BarangController extends Controller
             if ($barang) {
                 $barang->is_perjalanan = false;
                 $barang->save();
-                return redirect()->back()->with('success', 'Berhasil mengubah is_perjalanan');
+                return redirect()->back()->with('success', 'Berhasil mengubah Status Perjalanan');
             } else {
                 return redirect()->back()->with('error', 'Barang tidak ditemukan');
             }
         }
+    }
+
+    /**
+     * Update status perjalanan (titikantar_id)
+     */
+    public function updateTitikAntar(Request $request, $id)
+    {
+        $barang = Barang::findOrFail($id);
+        $barang->titikantar_id = $request->input('titikantar_id');
+        $barang->save();
+
+        return redirect()->back()->with('success', 'Titik Antar berhasil diperbarui');
     }
 }

@@ -38,7 +38,7 @@ class ArmadaController extends Controller
 
         Armada::create($data);
 
-        return redirect()->route('armada.index');
+        return redirect()->route('armada.index')->with(['success' => 'Berhasil menambah Armada Kendaraan']);
     }
 
     /**
@@ -69,7 +69,7 @@ class ArmadaController extends Controller
 
         Armada::where('id', $id)->update($data);
 
-        return redirect()->route('armada.index');
+        return redirect()->route('armada.index')->with(['success' => 'Berhasil merubah Armada Kendaraan']);
     }
 
     /**
@@ -78,7 +78,10 @@ class ArmadaController extends Controller
     public function destroy(string $id)
     {
         $armada = Armada::where('id', $id)->firstOrFail();
+        foreach ($armada->barang as $barang) {
+            $barang->delete();
+        }
         $armada->delete();
-        return redirect()->route('armada.index');
+        return redirect()->route('armada.index')->with(['success' => 'Berhasil menghapus Armada Kendaraan']);
     }
 }

@@ -41,7 +41,7 @@ class TitikAntarController extends Controller
 
         TitikAntar::create($data);
 
-        return redirect()->route('titikantar.index');
+        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menambah Titik Antar (Check Point)']);
     }
 
     /**
@@ -75,7 +75,7 @@ class TitikAntarController extends Controller
 
         TitikAntar::where('id', $id)->update($data);
 
-        return redirect()->route('titikantar.index');
+        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil merubah Titik Antar (Check Point)']);
     }
 
     /**
@@ -84,7 +84,10 @@ class TitikAntarController extends Controller
     public function destroy(string $id)
     {
         $titikantar = TitikAntar::where('id', $id)->firstOrFail();
+        foreach ($titikantar->barang as $barang) {
+            $barang->delete();
+        }
         $titikantar->delete();
-        return redirect()->route('titikantar.index');
+        return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menghapus Titik Antar (Check Point)']);
     }
 }

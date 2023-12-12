@@ -38,7 +38,7 @@ class KategoriController extends Controller
 
         Kategori::create($data);
 
-        return redirect()->route('kategori.index');
+        return redirect()->route('kategori.index')->with(['success' => 'Berhasil menambah katagori Barang']);
     }
 
     /**
@@ -69,7 +69,7 @@ class KategoriController extends Controller
 
         Kategori::where('id', $id)->update($data);
 
-        return redirect()->route('kategori.index');
+        return redirect()->route('kategori.index')->with(['success' => 'Berhasil mengubah katagori Barang']);
     }
 
     /**
@@ -78,7 +78,10 @@ class KategoriController extends Controller
     public function destroy(string $id)
     {
         $kategori = Kategori::where('id', $id)->firstOrFail();
+        foreach ($kategori->barang as $barang) {
+            $barang->delete();
+        }
         $kategori->delete();
-        return redirect()->route('kategori.index');
+        return redirect()->route('kategori.index')->with(['success' => 'Berhasil menghapus katagori Barang']);
     }
 }

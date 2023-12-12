@@ -30,6 +30,9 @@ Route::resource('/titikantar', TitikAntarController::class);
 // change is_perjalanan to true or false
 Route::put('/update-is-perjalanan/{id}', [BarangController::class, 'updateIsPerjalanan'])->name('update-is-perjalanan');
 
+// update titik_antar
+Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAntar'])->name('update-titik-antar');
+
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');

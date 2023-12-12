@@ -13,6 +13,13 @@
         </a>
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Content Row -->
     <div class="row">
         <div class="col-lg-12 mb-4">
@@ -29,7 +36,7 @@
                                 <th>Tujuan</th>
                                 <th>Tanggal Pengiriman</th>
                                 <th>Armada</th>
-                                <th>Status Pengiriman</th>
+                                <th>Barang berada di</th>
                                 <th>Status Perjalanan</th>
                                 <th>Aksi</th>
                             </tr>
@@ -40,20 +47,29 @@
                                 <td>{{ $barang->nomor_resi }}</td>
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->lokasi_penerima }}</td>
-                                <td>{{ $barang->tanggal_pengiriman }}</td>
+                                <td>{{ $barang->tanggal_pengiriman->format('d-m-Y') }}</td>
                                 <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
                                 <td>
                                     @if ($barang->is_perjalanan == 0)
-                                    Di titik antar: {{ $barang->titikantar->kota }} 
+                                    <form action="{{ route('update-titik-antar', ['id' => $barang->id]) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <select name="titikantar_id" class="form-control" onchange="this.form.submit()">
+                                            <option value="{{ $barang->titikantar_id }}">{{ $barang->titikantar->kota }}</option>
+                                            @foreach ($titikantars as $titikantar)
+                                                <option value="{{ $titikantar->id }}">{{ $titikantar->kota }}</option>
+                                            @endforeach
+                                        </select>
+                                    </form>                                    
                                     @else
-                                    Dalam Perjalanan
+                                    <button class="btn btn-light" disabled>Dalam Perjalanan</button>
                                     @endif
                                 </td>
                                 <td>
                                     <form action="{{ route('update-is-perjalanan', ['id' => $barang->id]) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                        <button type="submit" class="btn btn-light">
                                             @if ($barang->is_perjalanan == 0)
                                                 ubah jadi dalam perjalanan
                                             @else
@@ -88,6 +104,7 @@
                                                         <form action="{{ route('barang.update', $barang->id) }}" method="POST">
                                                             @csrf
                                                             @method('PUT')
+                                                            <input type="hidden" name="is_perjalanan" value="{{ $barang->is_perjalanan }}">
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <div class="mb-3">
@@ -162,7 +179,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-sm btn-primary mx-1 rounded-2" data-toggle="modal" data-target="#lihatModal{{ $kategori->id }}">
+                                        <button class="btn btn-sm btn-primary mx-1 rounded-2" data-toggle="modal" data-target="#lihatModal{{ $barang->id }}">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                         <!-- Modal -->
