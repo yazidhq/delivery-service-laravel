@@ -12,10 +12,13 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $data = [
-            'kategoris' => Kategori::all(),
-        ];
-        return view('dashboard.karyawan.kategori.kategori', $data);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = [
+                'kategoris' => Kategori::all(),
+            ];
+            return view('dashboard.karyawan.kategori.kategori', $data);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -31,14 +34,17 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'nama_kategori' => 'required',
-            'deskripsi' => 'required'
-        ]);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_kategori' => 'required',
+                'deskripsi' => 'required'
+            ]);
 
-        Kategori::create($data);
+            Kategori::create($data);
 
-        return redirect()->route('kategori.index')->with(['success' => 'Berhasil menambah katagori Barang']);
+            return redirect()->route('kategori.index')->with(['success' => 'Berhasil menambah katagori Barang']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -62,14 +68,17 @@ class KategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->validate($request, [
-            'nama_kategori' => 'required',
-            'deskripsi' => 'required'   
-        ]);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_kategori' => 'required',
+                'deskripsi' => 'required'   
+            ]);
 
-        Kategori::where('id', $id)->update($data);
+            Kategori::where('id', $id)->update($data);
 
-        return redirect()->route('kategori.index')->with(['success' => 'Berhasil mengubah katagori Barang']);
+            return redirect()->route('kategori.index')->with(['success' => 'Berhasil mengubah katagori Barang']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -77,11 +86,14 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        $kategori = Kategori::where('id', $id)->firstOrFail();
-        foreach ($kategori->barang as $barang) {
-            $barang->delete();
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $kategori = Kategori::where('id', $id)->firstOrFail();
+            foreach ($kategori->barang as $barang) {
+                $barang->delete();
+            }
+            $kategori->delete();
+            return redirect()->route('kategori.index')->with(['success' => 'Berhasil menghapus katagori Barang']);
         }
-        $kategori->delete();
-        return redirect()->route('kategori.index')->with(['success' => 'Berhasil menghapus katagori Barang']);
+        return redirect()->route('dashboard');
     }
 }

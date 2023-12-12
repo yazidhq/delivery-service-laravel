@@ -7,10 +7,12 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Barang</h1>
+        @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
         <a href="{{ route('barang.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i>
             Tambah Barang
         </a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -45,7 +47,9 @@
                                 <th>Armada</th>
                                 <th>Posisi Barang</th>
                                 <th>Status Perjalanan</th>
+                                @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
                                 <th>Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -89,6 +93,7 @@
                                         </select>
                                     </form>
                                 </td>
+                                @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
                                 <td>
                                     <div class="input-group mb-3">
                                         <form action="{{ route('barang.destroy', $barang->id) }}" method="POST" class="deleteForm">
@@ -225,6 +230,7 @@
                                         </a>                                        
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

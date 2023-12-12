@@ -31,12 +31,15 @@ class BarangController extends Controller
      */
     public function create()
     {
-        $data = [
-            'kategoris' => Kategori::all(),
-            'armadas' => Armada::all(),
-            'titikantars' => TitikAntar::all(),
-        ];
-        return view('dashboard.karyawan.barang.tambah', $data);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = [
+                'kategoris' => Kategori::all(),
+                'armadas' => Armada::all(),
+                'titikantars' => TitikAntar::all(),
+            ];
+            return view('dashboard.karyawan.barang.tambah', $data);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -44,22 +47,25 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'nama_barang' => 'required',
-            'deskripsi' => 'required',
-            'kategori_id' => 'required',
-            'tanggal_pengiriman' => 'required',
-            'armada_id' => 'required',
-            'nama_pengirim' => 'required',
-            'nama_penerima' => 'required',
-            'nomor_penerima' => 'required',
-            'lokasi_penerima' => 'required',
-            'titikantar_id' => 'required',
-        ]);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_barang' => 'required',
+                'deskripsi' => 'required',
+                'kategori_id' => 'required',
+                'tanggal_pengiriman' => 'required',
+                'armada_id' => 'required',
+                'nama_pengirim' => 'required',
+                'nama_penerima' => 'required',
+                'nomor_penerima' => 'required',
+                'lokasi_penerima' => 'required',
+                'titikantar_id' => 'required',
+            ]);
 
-        Barang::create($data);
+            Barang::create($data);
 
-        return redirect()->route('barang.index')->with(['success' => 'Berhasil memasukkan Barang']);
+            return redirect()->route('barang.index')->with(['success' => 'Berhasil memasukkan Barang']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -83,25 +89,28 @@ class BarangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->validate($request, [
-            'nama_barang' => 'required',
-            'deskripsi' => 'required',
-            'kategori_id' => 'required',
-            'tanggal_pengiriman' => 'required',
-            'armada_id' => 'required',
-            'nama_pengirim' => 'required',
-            'nama_penerima' => 'required',
-            'nomor_penerima' => 'required',
-            'lokasi_penerima' => 'required',
-            'titikantar_id' => 'required',
-            'is_perjalanan' => 'required',
-        ]);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'nama_barang' => 'required',
+                'deskripsi' => 'required',
+                'kategori_id' => 'required',
+                'tanggal_pengiriman' => 'required',
+                'armada_id' => 'required',
+                'nama_pengirim' => 'required',
+                'nama_penerima' => 'required',
+                'nomor_penerima' => 'required',
+                'lokasi_penerima' => 'required',
+                'titikantar_id' => 'required',
+                'is_perjalanan' => 'required',
+            ]);
 
-        $barang = Barang::findOrFail($id);
+            $barang = Barang::findOrFail($id);
 
-        $barang->update($data);
+            $barang->update($data);
 
-        return redirect()->route('barang.index')->with(['success' => 'Berhasil merubah data Barang']);
+            return redirect()->route('barang.index')->with(['success' => 'Berhasil merubah data Barang']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -109,9 +118,12 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        $barang = Barang::where('id', $id)->firstOrFail();
-        $barang->delete();
-        return redirect()->route('barang.index')->with(['success' => 'Berhasil menghapus Barang']);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $barang = Barang::where('id', $id)->firstOrFail();
+            $barang->delete();
+            return redirect()->route('barang.index')->with(['success' => 'Berhasil menghapus Barang']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -156,21 +168,24 @@ class BarangController extends Controller
      */
     public function generateSuratJalan($id)
     {
-        $barang = Barang::findOrFail($id);
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+            $barang = Barang::findOrFail($id);
 
-        $pdf = App::make('dompdf.wrapper');
+            $pdf = App::make('dompdf.wrapper');
 
-        // Configure DomPDF
-        $pdf->getDomPDF()->set_option("isHtml5ParserEnabled", true);
-        $pdf->getDomPDF()->set_option("isPhpEnabled", true);
+            // Configure DomPDF
+            $pdf->getDomPDF()->set_option("isHtml5ParserEnabled", true);
+            $pdf->getDomPDF()->set_option("isPhpEnabled", true);
 
-        // Load view
-        $pdf->loadView('surat-jalan', compact('barang'));
+            // Load view
+            $pdf->loadView('surat-jalan', compact('barang'));
 
-        // Set paper orientation to landscape
-        $pdf->setPaper('A4', 'landscape');
+            // Set paper orientation to landscape
+            $pdf->setPaper('A4', 'landscape');
 
-        // Stream the PDF to the browser
-        return $pdf->stream('surat-jalan-'.$barang->id.'.pdf');
+            // Stream the PDF to the browser
+            return $pdf->stream('surat-jalan-'.$barang->id.'.pdf');
+        }
+        return redirect()->route('dashboard');
     }
 }

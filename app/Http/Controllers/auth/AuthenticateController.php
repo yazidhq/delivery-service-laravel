@@ -40,6 +40,7 @@ class AuthenticateController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'role_id' => 'required',
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed'
@@ -50,7 +51,7 @@ class AuthenticateController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('user.index');
     }
 
     /**

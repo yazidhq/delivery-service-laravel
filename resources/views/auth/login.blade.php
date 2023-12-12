@@ -39,7 +39,7 @@
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="form3Example3">Alamat Email</label>
                                     <input type="email" id="form3Example3"
-                                        class="form-control @error('email') is-invalid @enderror" name="email" />
+                                        class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"/>
                                     @if ($errors->has('email'))
                                     <span class="text-danger">{{ $errors->first('email') }}</span>
                                     @endif

@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\ArmadaController;
+use App\Models\Barang;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ArmadaController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\auth\AuthenticateController;
 use App\Http\Controllers\TitikAntarController;
+use App\Http\Controllers\auth\AuthenticateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +22,24 @@ use App\Http\Controllers\TitikAntarController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Route::get('/', function () {
+    // Check for search input
+    $search = request('search');
+    $barangs = $search ? Barang::where('nomor_resi', 'like', '%' . $search . '%')->get() : [];
+
+    return view('home')->with('barangs', $barangs);
+})->name('index');
 
 // resource all of controller
 Route::resource('/barang', BarangController::class)->middleware('auth');
 Route::resource('/kategori', KategoriController::class)->middleware('auth');
 Route::resource('/armada', ArmadaController::class)->middleware('auth');
 Route::resource('/titikantar', TitikAntarController::class)->middleware('auth');
+Route::resource('/user', UserController::class)->middleware('auth');
+Route::resource('/role', RoleController::class)->middleware('auth');
 
 // update titik_antar
 Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAntar'])->name('update-titik-antar')->middleware('auth');

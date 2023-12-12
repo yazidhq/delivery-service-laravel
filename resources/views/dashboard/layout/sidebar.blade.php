@@ -25,16 +25,16 @@
         Manajemen Pegawai
     </div>
     <!-- User Management -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'user') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('user.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Data Pegawai</span>
+            <span>Data User</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'role') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('role.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Tambah Pegawai</span>
+            <span>Role User</span>
         </a>
     </li>
 
@@ -46,7 +46,7 @@
         Titik Antar & Armada
     </div>
     <!-- Stuff Management -->
-    <li class="nav-item  {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('titikantar.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Titik Antar</span>
@@ -69,16 +69,18 @@
     </div>
 
     <!-- Nav Item - Charts -->
-    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('barang.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Barang Masuk</span>
-        </a>
-    </li>
+    @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'kategori') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kategori.index') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Kategori Barang</span>
+        </a>
+    </li>
+    @endif
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('barang.index') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Barang Masuk</span>
         </a>
     </li>
 
