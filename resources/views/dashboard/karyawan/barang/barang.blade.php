@@ -17,6 +17,10 @@
                 <i class="fas fa-download fa-sm text-white-50"></i>
                 Ekspor ke Excel
             </a>
+            <a href="https://docs.google.com/spreadsheets/d/1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8/edit#gid=0" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" target="_blank">
+                <i class="fas fa-download fa-sm text-white-50"></i>
+                Spreadsheet
+            </a>
         </div>
         @endif
     </div>
@@ -226,7 +230,8 @@
                                                             <li class="list-group-item"><strong>Tanggal Kirim : </strong>{{ $barang->tanggal_pengiriman }}</li>
                                                             <li class="list-group-item"><strong>Jenis Barang : </strong>{{ $barang->kategori->nama_kategori }}</li>
                                                             <li class="list-group-item"><strong>Armada Pengiriman : </strong>{{ $barang->armada->nama_kendaraan }}</li>
-                                                            <li class="list-group-item"><strong>Tujuan : </strong>{{ $barang->lokasi_penerima }}</li>
+                                                            <li class="list-group-item"><strong>Kota Tujuan : </strong>{{ $barang->kota_penerima }}</li>
+                                                            <li class="list-group-item"><strong>Alamat : </strong>{{ $barang->lokasi_penerima }}</li>
                                                             <li class="list-group-item"><strong>Nama Pengirim : </strong>{{ $barang->nama_pengirim }}</li>
                                                             <li class="list-group-item"><strong>Nama Penerima : </strong>{{ $barang->nama_penerima }}</li>
                                                             <li class="list-group-item"><strong>Nomor Penerima : </strong>{{ $barang->nomor_penerima }}</li>

@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\App;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+use Google_Client;
+use Google_Service_Sheets;
+use Google_Service_Sheets_ValueRange;
+use Google_Service_Sheets_Request;
+use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
+
 class BarangController extends Controller
 {
     /**
@@ -63,11 +69,53 @@ class BarangController extends Controller
                 'titikantar_id' => 'required',
             ]);
 
-            Barang::create($data);
+            $barang = Barang::create($data);
+
+            $this->addToGoogleSheet($barang);
 
             return redirect()->route('barang.index')->with(['success' => 'Berhasil memasukkan Barang']);
         }
         return redirect()->route('dashboard');
+    }
+
+    /**
+     * Store a newly created resource in spreadsheet.
+     */
+    private function addToGoogleSheet(Barang $barang)
+    {
+        $client = new Google_Client();
+        $client->setAuthConfig(storage_path('medhitama-735188f89489.json'));
+        $client->addScope(Google_Service_Sheets::SPREADSHEETS);
+
+        $sheets = new Google_Service_Sheets($client);
+
+        $spreadsheetId = '1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8';
+        $range = 'Barang';
+
+        // Format data sesuai dengan struktur spreadsheet
+        $data = [
+            $barang->id,
+            "'" . $barang->nomor_resi, // Menambahkan tanda petik di awal untuk memastikan format teks
+            $barang->nama_barang,
+            $barang->deskripsi,
+            $barang->kategori->nama_kategori,
+            $barang->nama_pengirim,
+            $barang->nama_penerima,
+            "'" . $barang->nomor_penerima, // Menambahkan tanda petik di awal untuk memastikan format teks
+            $barang->armada->nama_kendaraan,
+            $barang->kota_penerima,
+            $barang->lokasi_penerima,
+            $barang->tanggal_pengiriman->format('d-m-Y'),
+        ];
+
+        // Buat objek ValueRange
+        $valueRange = new Google_Service_Sheets_ValueRange();
+        $valueRange->setValues(['values' => $data]);
+
+        // Tambahkan data ke spreadsheet
+        $sheets->spreadsheets_values->append($spreadsheetId, $range, $valueRange, [
+            'valueInputOption' => 'USER_ENTERED'
+        ]);
     }
 
     /**
@@ -111,9 +159,73 @@ class BarangController extends Controller
 
             $barang->update($data);
 
+            // Perbarui data di spreadsheet
+            $this->updateGoogleSheet($barang);
+
             return redirect()->route('barang.index')->with(['success' => 'Berhasil merubah data Barang']);
         }
         return redirect()->route('dashboard');
+    }
+
+    /**
+     * Update the specified resource in spreadsheet.
+     */
+    private function updateGoogleSheet(Barang $barang)
+    {
+        $client = new Google_Client();
+        $client->setAuthConfig(storage_path('medhitama-735188f89489.json'));
+        $client->addScope(Google_Service_Sheets::SPREADSHEETS);
+
+        $sheets = new Google_Service_Sheets($client);
+
+        $spreadsheetId = '1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8';
+        $range = 'Barang';
+
+        // Dapatkan data saat ini dari spreadsheet
+        $response = $sheets->spreadsheets_values->get($spreadsheetId, $range);
+        $values = $response->getValues();
+
+        // Temukan baris yang sesuai dengan ID barang
+        $foundRowIndex = null;
+        foreach ($values as $index => $row) {
+            if ($row[0] == $barang->id) {
+                $foundRowIndex = $index + 1;
+                break;
+            }
+        }
+
+        // Jika baris ditemukan, perbarui data di spreadsheet
+        if ($foundRowIndex !== null) {
+            $data = [
+                $barang->id,
+                $barang->nomor_resi,
+                $barang->nama_barang,
+                $barang->deskripsi,
+                $barang->kategori->nama_kategori,
+                $barang->nama_pengirim,
+                $barang->nama_penerima,
+                $barang->nomor_penerima,
+                $barang->armada->nama_kendaraan,
+                $barang->kota_penerima,
+                $barang->lokasi_penerima,
+                $barang->tanggal_pengiriman->format('d-m-Y'),
+            ];
+
+            // Update data di baris yang sesuai
+            $updateRange = 'Barang!A' . $foundRowIndex . ':L' . $foundRowIndex;
+            $valueRange = new Google_Service_Sheets_ValueRange();
+            $valueRange->setValues([$data]);
+
+            // Perbarui data di spreadsheet
+            try {
+                $sheets->spreadsheets_values->update($spreadsheetId, $updateRange, $valueRange, [
+                    'valueInputOption' => 'RAW'
+                ]);
+            } catch (\Exception $e) {
+                // Tangkap dan tampilkan pesan kesalahan
+                dd($e->getMessage());
+            }
+        }
     }
 
     /**
@@ -124,9 +236,69 @@ class BarangController extends Controller
         if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
             $barang = Barang::where('id', $id)->firstOrFail();
             $barang->delete();
+            // Delete the record from the Google Sheet
+            $this->deleteFromGoogleSheet($barang);
             return redirect()->route('barang.index')->with(['success' => 'Berhasil menghapus Barang']);
         }
         return redirect()->route('dashboard');
+    }
+
+    /**
+     * Remove the specified resource from the Google Sheet.
+     */
+    private function deleteFromGoogleSheet(Barang $barang)
+    {
+        $client = new Google_Client();
+        $client->setAuthConfig(storage_path('medhitama-735188f89489.json'));
+        $client->addScope(Google_Service_Sheets::SPREADSHEETS);
+
+        $sheets = new Google_Service_Sheets($client);
+
+        $spreadsheetId = '1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8';
+        $range = 'Barang';
+
+        // Get data from the spreadsheet
+        $response = $sheets->spreadsheets_values->get($spreadsheetId, $range);
+        $values = $response->getValues();
+
+        // Find the row index that corresponds to the Barang ID
+        $foundRowIndex = null;
+        foreach ($values as $index => $row) {
+            if ($row[0] == $barang->id) {
+                $foundRowIndex = $index + 1;
+                break;
+            }
+        }
+
+        // If the row is found, create a request to clear values for that row
+        if ($foundRowIndex !== null) {
+            $deleteRange = 'Barang!A' . $foundRowIndex . ':L' . $foundRowIndex;
+
+            // Create a request to clear values
+            $clearRequest = new Google_Service_Sheets_Request([
+                'deleteDimension' => [
+                    'range' => [
+                        'sheetId' => 0,
+                        'dimension' => 'ROWS',
+                        'startIndex' => $foundRowIndex - 1,
+                        'endIndex' => $foundRowIndex,
+                    ],
+                ],
+            ]);
+
+            // Batch update to clear values
+            $batchUpdateRequest = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+                'requests' => [$clearRequest],
+            ]);
+
+            // Execute the batch update
+            try {
+                $sheets->spreadsheets->batchUpdate($spreadsheetId, $batchUpdateRequest);
+            } catch (\Exception $e) {
+                // Handle the exception, you can log the error or show a specific message to the user
+                dd($e->getMessage());
+            }
+        }
     }
 
     /**

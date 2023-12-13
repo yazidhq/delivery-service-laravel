@@ -27,13 +27,13 @@
     <!-- User Management -->
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'user') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('user.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-user"></i>
             <span>Data User</span>
         </a>
     </li>
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'role') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('role.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-users"></i>
             <span>Role User</span>
         </a>
     </li>
@@ -48,13 +48,13 @@
     <!-- Stuff Management -->
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('titikantar.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-shipping-fast"></i>
             <span>Titik Antar</span>
         </a>
     </li>
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'armada') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('armada.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-bus"></i>
             <span>Armada Pengantaran</span>
         </a>
     </li>
@@ -72,15 +72,25 @@
     @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'kategori') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kategori.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-tag"></i>
             <span>Kategori Barang</span>
         </a>
     </li>
     @endif
     <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('barang.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-sign-in-alt"></i>
             <span>Barang Masuk</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <li class="nav-item">
+        <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Halaman Utama</span>
         </a>
     </li>
 

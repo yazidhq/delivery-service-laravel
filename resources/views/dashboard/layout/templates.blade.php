@@ -11,6 +11,10 @@
 
     <title>{{ Str::ucfirst(auth()->user()->role->nama) }}</title>
 
+    <!-- Favicons -->
+    <link href="{{ asset('/logo.png') }}" rel="icon">
+    <link href="{{ asset('/logo.png') }}" rel="apple-touch-icon">
+
     {{-- custom table --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel='stylesheet' href='https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css'>

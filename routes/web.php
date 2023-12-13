@@ -26,12 +26,13 @@ Route::get('/', function () {
 });
 
 Route::get('/', function () {
-    // Check for search input
     $search = request('search');
     $barangs = $search ? Barang::where('nomor_resi', 'like', '%' . $search . '%')->get() : [];
 
-    return view('home')->with('barangs', $barangs);
+    return view('home', ['barangs' => $barangs]);
 })->name('index');
+
+
 
 // resource all of controller
 Route::resource('/barang', BarangController::class)->middleware('auth');

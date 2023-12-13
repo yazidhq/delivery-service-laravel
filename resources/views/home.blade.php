@@ -9,9 +9,11 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
   <!-- Favicons -->
-  <link href="{{ asset('/home-assets/img/favicon.png') }}" rel="icon">
-  <link href="{{ asset('/home-assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+  <link href="{{ asset('/logo.png') }}" rel="icon">
+  <link href="{{ asset('/logo.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -63,7 +65,7 @@
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <div class="container text-center text-md-left" data-aos="fade-up">
       <h1 class="my-5">Selamat Datang di <br> <span>PT. MULTISARANA MEDHITAMA</span></h1>
-      <a href="#about" class="btn-get-started scrollto">Get Started</a>
+      <a href="#resi" class="btn-get-started scrollto">Periksa Nomor Resi</a>
     </div>
   </section><!-- End Hero -->
 
@@ -79,7 +81,7 @@
         </div>
 
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-6" data-aos="fade-left">
             <div class="icon-box">
               <div class="icon"><i class="bx bxl-dribbble"></i></div>
               <h4><a href="">Ekspedisi Darat</a></h4>
@@ -88,7 +90,7 @@
           </div>
 
           <div class="col-lg-6">
-            <div class="icon-box">
+            <div class="icon-box" data-aos="fade-right">
               <div class="icon"><i class="bx bx-file"></i></div>
               <h4><a href="">Ekspedisi Laut</a></h4>
               <p>Mengerjakan job di Kalimantan, Sulawesi dan Papua</p>
@@ -100,7 +102,7 @@
     </section><!-- End What We Do Section -->
 
     <!-- ======= About Section ======= -->
-    <section id="tentang" class="about section-bg">
+    <section id="tentang" class="about section-bg" data-aos="fade-up">
       <div class="container mt-5">
 
         <div class="section-title">
@@ -144,7 +146,7 @@
     </section><!-- End About Section -->
 
     <!-- ======= Team Section ======= -->
-    <section id="struktur" class="team">
+    <section id="struktur" class="team" data-aos="fade-left">
       <div class="container">
 
         <div class="section-title">
@@ -220,7 +222,7 @@
     </section><!-- End Team Section -->
 
     <!-- ======= Team Section ======= -->
-    <section id="rekanan" class="team section-bg">
+    <section id="kerja" class="team section-bg" data-aos="fade-right">
         <div class="container mb-5">
   
             <div class="section-title">
@@ -266,7 +268,7 @@
     
         </div>
 
-        <hr class="container">
+        <hr class="container" id="armada">
 
         <div class="container">
   
@@ -315,7 +317,7 @@
     </section><!-- End Team Section -->
 
     <!-- ======= Contact Section ======= -->
-    <section id="kontak" class="contact">
+    <section id="kontak" class="contact" data-aos="fade-up">
       <div class="container">
 
         <div class="section-title">
@@ -366,18 +368,45 @@
   
           <div class="row mt-5 justify-content-center">
             <div class="col-lg-10">
-              <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-                <div class="form-group mt-3">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Masukkan nomor resi" required>
-                </div>
-                <div class="text-center mt-3"><button type="submit">Periksa</button></div>
-              </form>
+                <form action="/#resi" method="GET" role="form">
+                    <div class="form-group mt-3">
+                        <input type="search" class="form-control" name="search" id="search" placeholder="Masukkan nomor resi" value="{{ request('search') }}" required>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-info text-light rounded-1">Periksa</button>
+                    </div>
+                </form>                
+                @if ($barangs)
+                    @forelse($barangs as $barang)
+                        <ul class="list-group mt-3">
+                            <li class="list-group-item">Nomor resi : {{ $barang->nomor_resi }}</li>
+                            <li class="list-group-item">Barang : {{ Str::ucfirst($barang->nama_barang) }}</li>
+                            <li class="list-group-item">
+                                @if ($barang->is_sampai && !$barang->is_perjalanan)
+                                    Barang telah sampai dan diterima
+                                @elseif(!$barang->is_sampai && $barang->is_perjalanan)
+                                    Barang sedang dalam perjalanan dari {{ Str::ucfirst($barang->titikantar->kota) }}
+                                @elseif(!$barang->is_sampai && !$barang->is_perjalanan)
+                                    Posisi Barang : berada di checkpoint {{ Str::ucfirst($barang->titikantar->kota) }}
+                                @endif
+                            </li>
+                            <li class="list-group-item">Armada Kendaraan : {{ Str::ucfirst($barang->armada->nama_kendaraan) }} | {{ Str::upper($barang->armada->plat_nomor) }}</li>
+                            <li class="list-group-item">Tujuan Pengiriman : {{ Str::ucfirst($barang->lokasi_penerima) }}</li>
+                            <li class="list-group-item">Tanggal Kirim : {{ $barang->tanggal_pengiriman->format('d-m-Y') }}</li>
+                        </ul>
+                    @empty
+                        <li class="list-group-item list-group-item-danger">Barang tidak ditemukan</li>
+                    @endforelse
+                    <div class="text-center mt-3">
+                      <a href="/#resi" class="btn btn-info rounded-1 text-light">RESET</a>
+                    </div>
+                @endif
+
             </div>
-  
           </div>
   
         </div>
-      </section><!-- End Contact Section -->
+    </section><!-- End Contact Section -->
 
   </main><!-- End #main -->
 
@@ -388,45 +417,31 @@
       <div class="container">
         <div class="row">
 
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Lumia</h3>
+          <div class="col-lg-8 col-md-6 footer-contact">
+            <h3>PT. MULTISARANA MEDHITAMA</h3>
             <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br><br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
+            JI. Usaha No. 26A Kel. Kebon Bawang Kec. Tanjung Priok, Jakarta Utara <br>
+              <strong>Telepon: </strong>6221-43800226 & 6221-43906389<br>
             </p>
           </div>
 
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{{ route('index') }}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#bidang">Bidang Kami</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#tentang">Tentang Kami</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#kontak">Kontak</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#resi">Periksa Resi</a></li>
             </ul>
           </div>
 
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Rekan Kerja</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#kerja">Rekan Kerja</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#armada">Rekan Armada</a></li>
             </ul>
-          </div>
-
-          <div class="col-lg-4 col-md-6 footer-newsletter">
-            <h4>Join Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
-            </form>
           </div>
 
         </div>
@@ -470,6 +485,11 @@
 
   <!-- Template Main JS File -->
   <script src="{{ asset('/home-assets/js/main.js') }}"></script>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
 
 </body>
 
