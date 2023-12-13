@@ -8,7 +8,8 @@ use App\Models\Kategori;
 use App\Models\TitikAntar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Barryvdh\DomPDF\Facade as PDF;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class BarangController extends Controller
 {
@@ -188,4 +189,89 @@ class BarangController extends Controller
         }
         return redirect()->route('dashboard');
     }
+
+    /**
+     * export barang data to excel
+     */
+    public function exportToExcel()
+    {
+        $barangs = Barang::all();
+
+        // Create a new Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set headers
+        $sheet->setCellValue('A1', 'NOMOR RESI');
+        $sheet->setCellValue('B1', 'NAMA BARANG');
+        $sheet->setCellValue('C1', 'DESKRIPSI');
+        $sheet->setCellValue('D1', 'KATEGORI BARANG');
+        $sheet->setCellValue('E1', 'NAMA PENGIRIM');
+        $sheet->setCellValue('F1', 'NAMA PENERIMA');
+        $sheet->setCellValue('G1', 'NOMOR PENERIMA');
+        $sheet->setCellValue('H1', 'ARMADA PENGIRIMAN');
+        $sheet->setCellValue('I1', 'TUJUAN PENGIRIMAN');
+        $sheet->setCellValue('J1', 'TANGGAL PENGIRIMAN');
+
+        // Set data
+        $row = 2;
+        foreach ($barangs as $barang) {
+            $sheet->setCellValueExplicit('A' . $row, $barang->nomor_resi, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('B' . $row, $barang->nama_barang);
+            $sheet->setCellValue('C' . $row, $barang->deskripsi);
+            $sheet->setCellValue('D' . $row, $barang->kategori->nama_kategori);
+            $sheet->setCellValue('E' . $row, $barang->nama_pengirim);
+            $sheet->setCellValue('F' . $row, $barang->nama_penerima);
+            $sheet->setCellValue('G' . $row, $barang->nomor_penerima);
+            $sheet->setCellValue('H' . $row, $barang->armada->nama_kendaraan);
+            $sheet->setCellValue('I' . $row, $barang->lokasi_penerima);
+            $sheet->setCellValue('J' . $row, $barang->tanggal_pengiriman->format('d-m-Y'));
+
+            $row++;
+        }
+
+        // Set size column following the data
+        foreach (range('A', $sheet->getHighestDataColumn()) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Set format for header
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '4285F4'],
+            ],
+        ];
+
+        $sheet->getStyle('A1:' . $sheet->getHighestDataColumn() . '1')->applyFromArray($headerStyle);
+
+        // Set format for data
+        $dataStyle = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D3D3D3'],
+            ],
+        ];
+
+        $sheet->getStyle('A2:' . $sheet->getHighestDataColumn() . $row)->applyFromArray($dataStyle);
+
+        // Create a new Excel object
+        $writer = new Xlsx($spreadsheet);
+
+        // current date
+        $currentDate = now()->format('d-m-y');
+
+        // Set response headers
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="data-barang-' . $currentDate . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        // Save file to output
+        $writer->save('php://output');
+    }
+
 }

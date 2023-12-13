@@ -13,11 +13,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data = [
-            'users' => User::all(),
-            'roles' => Role::all()
-        ];  
-        return view('dashboard.admin.user.pegawai', $data);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = [
+                'users' => User::all(),
+                'roles' => Role::all()
+            ];  
+            return view('dashboard.admin.user.pegawai', $data);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -33,16 +36,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $this->validate($request, [
-            'role_id' => 'required',
-            'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
-        ]);
+        if(auth()->user()->role->nama == 'admin'){
+            $data = $this->validate($request, [
+                'role_id' => 'required',
+                'name' => 'required|string|max:250',
+                'email' => 'required|email|max:250|unique:users',
+                'password' => 'required|min:8|confirmed'
+            ]);
 
-        User::create($data);
+            User::create($data);
 
-        return redirect()->route('user.index')->with(['success'=>'Berasil menambah user']);
+            return redirect()->route('user.index')->with(['success'=>'Berasil menambah user']);
+        }
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -66,24 +72,27 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::findOrFail($id);
+        if(auth()->user()->role->nama == 'admin'){
+            $user = User::findOrFail($id);
 
-        $data = $this->validate($request, [
-            'role_id' => 'required',
-            'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users,email,'.$user->id,
-            'password' => 'nullable|min:8|confirmed'
-        ]);
+            $data = $this->validate($request, [
+                'role_id' => 'required',
+                'name' => 'required|string|max:250',
+                'email' => 'required|email|max:250|unique:users,email,'.$user->id,
+                'password' => 'nullable|min:8|confirmed'
+            ]);
 
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->input('password'));
-        } else {
-            unset($data['password']);
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->input('password'));
+            } else {
+                unset($data['password']);
+            }
+
+            $user->update($data);
+
+            return redirect()->route('user.index')->with(['success'=>'Berhasil mengupdate user']);
         }
-
-        $user->update($data);
-
-        return redirect()->route('user.index')->with(['success'=>'Berhasil mengupdate user']);
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -91,8 +100,11 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::where('id', $id)->firstOrFail();
-        $user->delete();
-        return redirect()->route('user.index')->with(['success'=>'Berasil menghapus user']);
+        if(auth()->user()->role->nama == 'admin'){
+            $user = User::where('id', $id)->firstOrFail();
+            $user->delete();
+            return redirect()->route('user.index')->with(['success'=>'Berasil menghapus user']);
+        }
+        return redirect()->route('dashboard');
     }
 }

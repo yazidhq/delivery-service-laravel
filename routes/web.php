@@ -50,6 +50,9 @@ Route::put('/update-status/{id}', [BarangController::class, 'updateStatus'])->na
 // creating pdf surat jalan barang
 Route::get('/surat-jalan/{id}', [BarangController::class, 'generateSuratJalan'])->name('surat-jalan');
 
+// export barang to excel
+Route::get('/export-barang-excel', [BarangController::class, 'exportToExcel'])->name('export-barang-excel');
+
 // authentication
 Route::controller(AuthenticateController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
