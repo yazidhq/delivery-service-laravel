@@ -58,6 +58,7 @@ class BarangController extends Controller
                 'nama_pengirim' => 'required',
                 'nama_penerima' => 'required',
                 'nomor_penerima' => 'required',
+                'kota_penerima' => 'required',
                 'lokasi_penerima' => 'required',
                 'titikantar_id' => 'required',
             ]);
@@ -100,6 +101,7 @@ class BarangController extends Controller
                 'nama_pengirim' => 'required',
                 'nama_penerima' => 'required',
                 'nomor_penerima' => 'required',
+                'kota_penerima' => 'required',
                 'lokasi_penerima' => 'required',
                 'titikantar_id' => 'required',
                 'is_perjalanan' => 'required',
@@ -210,8 +212,9 @@ class BarangController extends Controller
         $sheet->setCellValue('F1', 'NAMA PENERIMA');
         $sheet->setCellValue('G1', 'NOMOR PENERIMA');
         $sheet->setCellValue('H1', 'ARMADA PENGIRIMAN');
-        $sheet->setCellValue('I1', 'TUJUAN PENGIRIMAN');
-        $sheet->setCellValue('J1', 'TANGGAL PENGIRIMAN');
+        $sheet->setCellValue('I1', 'KOTA TUJUAN');
+        $sheet->setCellValue('J1', 'LOKASI LENGKAP TUJUAN');
+        $sheet->setCellValue('K1', 'TANGGAL PENGIRIMAN');
 
         // Set data
         $row = 2;
@@ -222,10 +225,11 @@ class BarangController extends Controller
             $sheet->setCellValue('D' . $row, $barang->kategori->nama_kategori);
             $sheet->setCellValue('E' . $row, $barang->nama_pengirim);
             $sheet->setCellValue('F' . $row, $barang->nama_penerima);
-            $sheet->setCellValue('G' . $row, $barang->nomor_penerima);
+            $sheet->setCellValueExplicit('G' . $row, $barang->nomor_penerima, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->setCellValue('H' . $row, $barang->armada->nama_kendaraan);
-            $sheet->setCellValue('I' . $row, $barang->lokasi_penerima);
-            $sheet->setCellValue('J' . $row, $barang->tanggal_pengiriman->format('d-m-Y'));
+            $sheet->setCellValue('I' . $row, $barang->kota_penerima);
+            $sheet->setCellValue('J' . $row, $barang->lokasi_penerima);
+            $sheet->setCellValue('K' . $row, $barang->tanggal_pengiriman->format('d-m-Y'));
 
             $row++;
         }

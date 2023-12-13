@@ -80,7 +80,7 @@
 
   <div class="surat-jalan">
     <div class="header">
-      <h1>[NAMA PERUSAHAAAN]</h1>
+      <h1>PT. MULTISARANA MEDHITAMA</h1>
       <h2>SURAT JALAN</h2>
     </div>
 
@@ -103,6 +103,12 @@
           <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
           <th>Tanggal Pengiriman</th>
           <td>{{ $barang->tanggal_pengiriman->format('d-m-Y') }}</td>
+        </tr>
+        <tr>
+          <th>Kota Tujuan</th>
+          <td>{{ $barang->kota_penerima }}</td>
+          <th>Alamat Tujuan</th>
+          <td>{{ $barang->lokasi_penerima }}</td>
         </tr>
       </table>
 

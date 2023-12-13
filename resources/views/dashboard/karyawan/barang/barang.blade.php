@@ -63,7 +63,7 @@
                             <tr class="@if($barang->is_sampai && !$barang->is_perjalanan) border-success @elseif(!$barang->is_sampai && $barang->is_perjalanan) border-warning @elseif(!$barang->is_sampai && !$barang->is_perjalanan) border-primary @endif">
                                 <td>{{ $barang->nomor_resi }}</td>
                                 <td>{{ $barang->nama_barang }}</td>
-                                <td>{{ $barang->lokasi_penerima }}</td>
+                                <td>{{ $barang->kota_penerima }}</td>
                                 <td>{{ $barang->tanggal_pengiriman->format('d-m-Y') }}</td>
                                 <td>{{ $barang->armada->nama_kendaraan }}: {{ $barang->armada->plat_nomor }}</td>
                                 <td>
@@ -135,7 +135,7 @@
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                                                        <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="{{ $barang->deskripsi }}">
+                                                                        <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" rows="4">{{ $barang->deskripsi }}</textarea>
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="kategori_id" class="form-label">Jenis/ Kategori Barang</label>
@@ -178,7 +178,11 @@
                                                                         <input type="text" class="form-control" id="nomor_penerima" name="nomor_penerima" value="{{ $barang->nomor_penerima }}">
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="lokasi_penerima" class="form-label">Tujuan (Lokasi Penerima)</label>
+                                                                        <label for="kota_penerima" class="form-label">Kota Penerima</label>
+                                                                        <input type="text" class="form-control" id="kota_penerima" name="kota_penerima" value="{{ $barang->kota_penerima }}">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="lokasi_penerima" class="form-label">Lokasi Lengkap Penerima</label>
                                                                         <input type="text" class="form-control" id="lokasi_penerima" name="lokasi_penerima" value="{{ $barang->lokasi_penerima }}">
                                                                     </div>
                                                                     <div class="mb-3">

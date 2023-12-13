@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                    <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi">{{ old('deskripsi') }}</textarea>
+                                    <textarea type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="5">{{ old('deskripsi') }}</textarea>
                                     @error('deskripsi')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -98,7 +98,14 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="lokasi_penerima" class="form-label">Tujuan (Lokasi Penerima)</label>
+                                    <label for="kota_penerima" class="form-label">Kota Penerima</label>
+                                    <input type="text" class="form-control @error('kota_penerima') is-invalid @enderror" id="kota_penerima" name="kota_penerima" value="{{ old('kota_penerima') }}">
+                                    @error('kota_penerima')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lokasi_penerima" class="form-label">Lokasi Lengkap Penerima</label>
                                     <input type="text" class="form-control @error('lokasi_penerima') is-invalid @enderror" id="lokasi_penerima" name="lokasi_penerima" value="{{ old('lokasi_penerima') }}">
                                     @error('lokasi_penerima')
                                         <p class="text-danger">{{ $message }}</p>

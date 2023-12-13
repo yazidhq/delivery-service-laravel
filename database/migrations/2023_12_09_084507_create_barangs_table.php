@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nama_pengirim');
             $table->string('nama_penerima');
             $table->string('nomor_penerima');
+            $table->string('kota_penerima');
             $table->string('lokasi_penerima');
             $table->string('tanggal_pengiriman');
             $table->boolean('is_perjalanan')->default(0);
