@@ -8,9 +8,10 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\TitikAntar;
 use Google_Service_Sheets;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Google_Service_Sheets_Request;
 
+use Google_Service_Sheets_Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Google_Service_Sheets_ValueRange;
@@ -330,7 +331,7 @@ class BarangController extends Controller
         $barang->save();
 
         // Log perubahan
-        Log::info($barang->nomor_resi . ' | ' . $barang->nama_barang . ' diubah. Titik Antar diupdate ke ' . $barang->titikantar->kota);
+        Log::info($barang->nomor_resi . ':' . Str::upper($barang->nama_barang) . '. Barang telah sampai di kota ' . Str::upper($barang->titikantar->kota));
 
         // Update Google Sheet
         $this->updateGoogleSheet($barang);
@@ -350,12 +351,15 @@ class BarangController extends Controller
         if ($status === 'sudah_diterima') {
             $barang->is_sampai = true;
             $barang->is_perjalanan = false;
+            Log::info($barang->nomor_resi . ':' . Str::upper($barang->nama_barang) . '. Barang telah diterima Penerima');
         } elseif ($status === 'dalam_perjalanan') {
             $barang->is_sampai = false;
             $barang->is_perjalanan = true;
+            Log::info($barang->nomor_resi . ':' . Str::upper($barang->nama_barang) . '. Barang sedang dalam perjalanan');
         } elseif ($status === 'di_titik_antar') {
             $barang->is_sampai = false;
             $barang->is_perjalanan = false;
+            Log::info($barang->nomor_resi . ':' . Str::upper($barang->nama_barang) . '. Barang telah sampai di kota ' . Str::upper($barang->titikantar->kota));
         }
 
         $barang->save();
