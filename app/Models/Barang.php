@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\TitikAntar;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -58,6 +59,14 @@ class Barang extends Model
     public function armada(): BelongsTo
     {
         return $this->belongsTo(Armada::class, 'armada_id');
+    }
+
+    /**
+     * Get the LogBarang for the barang.
+     */
+    public function log_barang(): HasMany
+    {
+        return $this->hasMany(LogBarang::class, 'barang_id');
     }
 
     /**

@@ -6,6 +6,7 @@ use Google_Client;
 use App\Models\Armada;
 use App\Models\Barang;
 use App\Models\Kategori;
+use App\Models\LogBarang;
 use App\Models\TitikAntar;
 use Google_Service_Sheets;
 use Illuminate\Support\Str;
@@ -31,6 +32,7 @@ class BarangController extends Controller
             'kategoris' => Kategori::all(),
             'armadas' => Armada::all(),
             'titikantars' => TitikAntar::all(),
+            'logbarang' => LogBarang::orderBy('id', 'DESC')->get()
         ];
         return view('dashboard.karyawan.barang.barang', $data);
     }
@@ -72,6 +74,18 @@ class BarangController extends Controller
             ]);
 
             $barang = Barang::create($data);
+
+            if ($barang->is_sampai && !$barang->is_perjalanan) {
+                $status_perjalanan = "Barang sudah diterima oleh " . $barang->nama_penerima;
+            } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+                $status_perjalanan = "Barang sedang dalam Perjalanan";
+            } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+                $status_perjalanan = "Barang telah sampai di kota " . $barang->titikantar->kota;
+            }
+
+            $barang->log_barang()->create([
+                'status_pengiriman' => $status_perjalanan
+            ]);
 
             $this->addToGoogleSheet($barang);
 
@@ -170,6 +184,18 @@ class BarangController extends Controller
 
             $barang->update($data);
 
+            if ($barang->is_sampai && !$barang->is_perjalanan) {
+                $status_perjalanan = "Barang sudah diterima oleh " . $barang->nama_penerima;
+            } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+                $status_perjalanan = "Barang sedang dalam Perjalanan";
+            } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+                $status_perjalanan = "Barang telah sampai di kota " . $barang->titikantar->kota;
+            }
+
+            $barang->log_barang()->create([
+                'status_pengiriman' => $status_perjalanan
+            ]);
+
             // Perbarui data di spreadsheet
             $this->updateGoogleSheet($barang);
 
@@ -256,6 +282,7 @@ class BarangController extends Controller
         if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $barang = Barang::where('id', $id)->firstOrFail();
             $barang->delete();
+            LogBarang::where('barang_id', $id)->delete();
             // Delete the record from the Google Sheet
             $this->deleteFromGoogleSheet($barang);
             return redirect()->route('barang.index')->with(['success' => 'Berhasil menghapus Barang']);
@@ -330,6 +357,18 @@ class BarangController extends Controller
         $barang->titikantar_id = $request->input('titikantar_id');
         $barang->save();
 
+        if ($barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Barang sudah diterima oleh " . $barang->nama_penerima;
+        } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+            $status_perjalanan = "Barang sedang dalam Perjalanan";
+        } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Barang telah sampai di kota " . $barang->titikantar->kota;
+        }
+
+        $barang->log_barang()->create([
+            'status_pengiriman' => $status_perjalanan
+        ]);
+
         // Log perubahan
         Log::info($barang->nomor_resi . ':' . Str::upper($barang->nama_barang) . '. Barang telah sampai di kota ' . Str::upper($barang->titikantar->kota));
 
@@ -363,6 +402,18 @@ class BarangController extends Controller
         }
 
         $barang->save();
+
+        if ($barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Barang sudah diterima oleh " . $barang->nama_penerima;
+        } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+            $status_perjalanan = "Barang sedang dalam Perjalanan";
+        } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Barang telah sampai di kota " . $barang->titikantar->kota;
+        }
+
+        $barang->log_barang()->create([
+            'status_pengiriman' => $status_perjalanan
+        ]);
 
         // Update Google Sheet
         $this->updateGoogleSheet($barang);
