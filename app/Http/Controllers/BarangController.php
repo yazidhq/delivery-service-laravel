@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Google_Client;
 use App\Models\Armada;
 use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\TitikAntar;
+use Google_Service_Sheets;
 use Illuminate\Http\Request;
+use Google_Service_Sheets_Request;
+
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Google_Service_Sheets_ValueRange;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-use Google_Client;
-use Google_Service_Sheets;
-use Google_Service_Sheets_ValueRange;
-use Google_Service_Sheets_Request;
 use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
 
 class BarangController extends Controller
@@ -38,7 +39,7 @@ class BarangController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = [
                 'kategoris' => Kategori::all(),
                 'armadas' => Armada::all(),
@@ -54,7 +55,7 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_barang' => 'required',
                 'deskripsi' => 'required',
@@ -92,6 +93,14 @@ class BarangController extends Controller
         $spreadsheetId = '1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8';
         $range = 'Barang';
 
+        if ($barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Diterima";
+        } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+            $status_perjalanan = "Perjalanan";
+        } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Di " . $barang->titikantar->kota;
+        }
+
         // Format data sesuai dengan struktur spreadsheet
         $data = [
             $barang->id,
@@ -106,6 +115,7 @@ class BarangController extends Controller
             $barang->kota_penerima,
             $barang->lokasi_penerima,
             $barang->tanggal_pengiriman->format('d-m-Y'),
+            $status_perjalanan
         ];
 
         // Buat objek ValueRange
@@ -139,7 +149,7 @@ class BarangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_barang' => 'required',
                 'deskripsi' => 'required',
@@ -181,6 +191,14 @@ class BarangController extends Controller
         $spreadsheetId = '1z-Evf2IBBdPMAd9aTIemZrU7M7YnYPDF62j7FlKaHT8';
         $range = 'Barang';
 
+        if ($barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Diterima";
+        } elseif (!$barang->is_sampai && $barang->is_perjalanan) {
+            $status_perjalanan = "Perjalanan";
+        } elseif (!$barang->is_sampai && !$barang->is_perjalanan) {
+            $status_perjalanan = "Di " . $barang->titikantar->kota;
+        }
+
         // Dapatkan data saat ini dari spreadsheet
         $response = $sheets->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
@@ -209,10 +227,11 @@ class BarangController extends Controller
                 $barang->kota_penerima,
                 $barang->lokasi_penerima,
                 $barang->tanggal_pengiriman->format('d-m-Y'),
+                $status_perjalanan
             ];
 
             // Update data di baris yang sesuai
-            $updateRange = 'Barang!A' . $foundRowIndex . ':L' . $foundRowIndex;
+            $updateRange = 'Barang!A' . $foundRowIndex . ':M' . $foundRowIndex; // Updated to cover columns A to M
             $valueRange = new Google_Service_Sheets_ValueRange();
             $valueRange->setValues([$data]);
 
@@ -233,7 +252,7 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $barang = Barang::where('id', $id)->firstOrFail();
             $barang->delete();
             // Delete the record from the Google Sheet
@@ -310,6 +329,12 @@ class BarangController extends Controller
         $barang->titikantar_id = $request->input('titikantar_id');
         $barang->save();
 
+        // Log perubahan
+        Log::info($barang->nomor_resi . ' | ' . $barang->nama_barang . ' diubah. Titik Antar diupdate ke ' . $barang->titikantar->kota);
+
+        // Update Google Sheet
+        $this->updateGoogleSheet($barang);
+
         return redirect()->back()->with('success', 'Titik Antar berhasil diperbarui');
     }
 
@@ -335,6 +360,9 @@ class BarangController extends Controller
 
         $barang->save();
 
+        // Update Google Sheet
+        $this->updateGoogleSheet($barang);
+
         return redirect()->back()->with('success', 'Status barang berhasil diperbarui');
     }
 
@@ -343,7 +371,7 @@ class BarangController extends Controller
      */
     public function generateSuratJalan($id)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $barang = Barang::findOrFail($id);
 
             $pdf = App::make('dompdf.wrapper');
@@ -359,7 +387,7 @@ class BarangController extends Controller
             $pdf->setPaper('A4', 'landscape');
 
             // Stream the PDF to the browser
-            return $pdf->stream('surat-jalan-'.$barang->id.'.pdf');
+            return $pdf->stream('surat-jalan-' . $barang->id . '.pdf');
         }
         return redirect()->route('dashboard');
     }
@@ -449,5 +477,4 @@ class BarangController extends Controller
         // Save file to output
         $writer->save('php://output');
     }
-
 }

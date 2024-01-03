@@ -12,7 +12,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = [
                 'roles' => Role::all(),
             ];
@@ -34,7 +34,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama' => 'required'
             ]);
@@ -67,7 +67,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama' => 'required'
             ]);
@@ -84,7 +84,7 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $role = Role::where('id', $id)->firstOrFail();
             $role->delete();
             return redirect()->route('role.index')->with(['success' => 'Berhasil menghapus role']);
