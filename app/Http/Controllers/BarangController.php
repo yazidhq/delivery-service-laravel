@@ -532,4 +532,22 @@ class BarangController extends Controller
         // Save file to output
         $writer->save('php://output');
     }
+
+    /**
+     * delete single log barang
+     */
+    public function hapusSingleLog($id)
+    {
+        LogBarang::where('id', $id)->delete();
+        return redirect()->route('barang.index')->with('success', 'Berhasil menghapus log perubahan');
+    }
+
+    /**
+     * delete all of log barang
+     */
+    public function hapusAllLog($id)
+    {
+        LogBarang::where('barang_id', $id)->delete();
+        return redirect()->route('barang.index')->with('success', 'Berhasil menghapus seluruh log perubahan');
+    }
 }

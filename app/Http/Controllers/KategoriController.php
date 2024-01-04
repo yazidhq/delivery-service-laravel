@@ -12,7 +12,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = [
                 'kategoris' => Kategori::all(),
             ];
@@ -34,7 +34,7 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_kategori' => 'required',
                 'deskripsi' => 'required'
@@ -42,7 +42,7 @@ class KategoriController extends Controller
 
             Kategori::create($data);
 
-            return redirect()->route('kategori.index')->with(['success' => 'Berhasil menambah katagori Barang']);
+            return redirect()->back()->with(['successKategori' => 'Berhasil menambah katagori Barang']);
         }
         return redirect()->route('dashboard');
     }
@@ -68,10 +68,10 @@ class KategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_kategori' => 'required',
-                'deskripsi' => 'required'   
+                'deskripsi' => 'required'
             ]);
 
             Kategori::where('id', $id)->update($data);
@@ -86,7 +86,7 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin') {
             $kategori = Kategori::where('id', $id)->firstOrFail();
             foreach ($kategori->barang as $barang) {
                 $barang->delete();

@@ -19,7 +19,53 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Barang
+    </div>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('barang.index') }}">
+            <i class="fas fa-fw fa-sign-in-alt"></i>
+            <span>Barang Masuk</span>
+        </a>
+    </li>
+    
+    
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
     @if (auth()->user()->role->nama == 'admin')
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Data Logistik
+    </div>
+    <!-- Stuff Management -->
+    @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'kategori') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('kategori.index') }}">
+            <i class="fas fa-fw fa-tag"></i>
+            <span>Data Kategori Barang</span>
+        </a>
+    </li>
+    @endif
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('titikantar.index') }}">
+            <i class="fas fa-fw fa-shipping-fast"></i>
+            <span>Data Titik Antar</span>
+        </a>
+    </li>
+    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'armada') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('armada.index') }}">
+            <i class="fas fa-fw fa-bus"></i>
+            <span>Data Armada Pengantaran</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
     <!-- Heading -->
     <div class="sidebar-heading">
         Manajemen Pegawai
@@ -40,52 +86,7 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Titik Antar & Armada
-    </div>
-    <!-- Stuff Management -->
-    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'titikantar') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('titikantar.index') }}">
-            <i class="fas fa-fw fa-shipping-fast"></i>
-            <span>Titik Antar</span>
-        </a>
-    </li>
-    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'armada') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('armada.index') }}">
-            <i class="fas fa-fw fa-bus"></i>
-            <span>Armada Pengantaran</span>
-        </a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
     @endif
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Barang
-    </div>
-
-    <!-- Nav Item - Charts -->
-    @if (auth()->user()->role->nama == 'pegawai' || auth()->user()->role->nama == 'admin')
-    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'kategori') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('kategori.index') }}">
-            <i class="fas fa-fw fa-tag"></i>
-            <span>Kategori Barang</span>
-        </a>
-    </li>
-    @endif
-    <li class="nav-item {{ Str::startsWith(request()->route()->getName(), 'barang') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('barang.index') }}">
-            <i class="fas fa-fw fa-sign-in-alt"></i>
-            <span>Barang Masuk</span>
-        </a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
 
     <li class="nav-item">
         <a class="nav-link" href="/">

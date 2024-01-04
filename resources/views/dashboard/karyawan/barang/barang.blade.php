@@ -345,13 +345,14 @@
                                             <i class="bi bi-substack"></i>
                                         </button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="logBarang{{ $barang->id }}" tabindex="-1" role="dialog"
-                                            aria-labelledby="lihatModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="logBarang{{ $barang->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="lihatModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="lihatModalLabel"><strong>Log
-                                                            Aktifitas Barang: {{ Str::upper($barang->nama_barang) }}</strong></h5>
+                                                                Aktifitas Barang: {{ Str::upper($barang->nama_barang)
+                                                                }}</strong></h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -387,16 +388,33 @@
                                                         <section>
                                                             <ul class="timeline">
                                                                 @foreach ($logbarang as $log)
-                                                                    @if ($log->barang_id == $barang->id)
-                                                                    <li class="timeline-item mb-5">
-                                                                        <h6 class="fw-bold">
-                                                                            {{ $log->status_pengiriman }}
-                                                                        </h6>
-                                                                        <p class="text-muted">{{ $log->created_at }}</p>
-                                                                    </li>
-                                                                    @endif
+                                                                @if ($log->barang_id == $barang->id)
+                                                                <li class="timeline-item mb-5">
+                                                                    <h6 class="fw-bold">
+                                                                        {{ $log->status_pengiriman }}
+
+                                                                    </h6>
+                                                                    <p class="text-muted d-inline">{{ $log->created_at
+                                                                        }}</p>
+                                                                    <form action="{{ route('singleLog.destroy', $log->id) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        @method("DELETE")
+                                                                        <button type="submit" class="btn btn-link">
+                                                                            Hapus proses ini
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                @endif
                                                                 @endforeach
                                                             </ul>
+                                                            <hr>
+                                                            <form action="{{ route('allLog.destroy', $barang->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method("DELETE")
+                                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                                    Hapus seluruh log
+                                                                </button>
+                                                            </form>
                                                         </section>
                                                     </div>
                                                 </div>

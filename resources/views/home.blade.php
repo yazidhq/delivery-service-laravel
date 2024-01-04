@@ -1,3 +1,11 @@
+<?php
+function redirectToWhatsApp($phoneNumber)
+{
+    $phoneNumber = preg_replace('/\D/', '', $phoneNumber);
+    return 'https://wa.me/' . $phoneNumber;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,7 +24,9 @@
   <link href="{{ asset('/logo.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{{ asset('/home-assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -106,8 +116,8 @@
       <div class="container mt-5">
 
         <div class="section-title">
-            <h2>Tentang Kami</h2>
-            <p>PT. MULTISARANA MEDHITAMA</p>
+          <h2>Tentang Kami</h2>
+          <p>PT. MULTISARANA MEDHITAMA</p>
         </div>
 
         <div class="row">
@@ -116,27 +126,30 @@
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0">
             <p style="text-align: justify">
-                PT. Multisarana Mednitama lahir dan awali dengan nama CV. Multi Sarana Mediatama pada tahun
-                2005 yang bergerak di bidang jasa transportasi yang memfokuskan di bidang jasa ekspedisi darat dan
-                laut, banyak mengerjakan Job di Kalimantan, Sulawesi dan Papua, sedangkan untuk ekspedisi darat
-                mengerjakan untuk trucking ke wilayah jawa, NTB dan NTT.
-                <br><br>
-                Sesuai dengan perkembangan usaha dan tuntutan rekanan kami, kami memperluas usaha dan
-                merubah nama menjadi PT. Multisarana Medhitama sejak 11 Mei 2011 dengan Akte Pendirian
-                Notaris Hesti Sulistiati Bimasto, S.H, Akte No.11. Dengan pemegang saham Puspa Anggraini dan
-                Aditya Ekatama, dan PT. Multisarana Medhitama di nahkodai oleh Puspa Anggraini sebagai
-                Direkturnya.
+              PT. Multisarana Mednitama lahir dan awali dengan nama CV. Multi Sarana Mediatama pada tahun
+              2005 yang bergerak di bidang jasa transportasi yang memfokuskan di bidang jasa ekspedisi darat dan
+              laut, banyak mengerjakan Job di Kalimantan, Sulawesi dan Papua, sedangkan untuk ekspedisi darat
+              mengerjakan untuk trucking ke wilayah jawa, NTB dan NTT.
+              <br><br>
+              Sesuai dengan perkembangan usaha dan tuntutan rekanan kami, kami memperluas usaha dan
+              merubah nama menjadi PT. Multisarana Medhitama sejak 11 Mei 2011 dengan Akte Pendirian
+              Notaris Hesti Sulistiati Bimasto, S.H, Akte No.11. Dengan pemegang saham Puspa Anggraini dan
+              Aditya Ekatama, dan PT. Multisarana Medhitama di nahkodai oleh Puspa Anggraini sebagai
+              Direkturnya.
             </p>
             <div class="row icon-boxes" style="text-align: justify">
               <div class="col-md-6">
                 <i class="bx bx-receipt"></i>
                 <h4>VISI</h4>
-                <p>Menjadikan Pelanggan OBYEK untuk tumbuh berkarya dan menggutamakan service prima hingga terbentuk aliran kerja yang berkesinambungan .</p>
+                <p>Menjadikan Pelanggan OBYEK untuk tumbuh berkarya dan menggutamakan service prima hingga terbentuk
+                  aliran kerja yang berkesinambungan .</p>
               </div>
               <div class="col-md-6 mt-4 mt-md-0">
                 <i class="bx bx-cube-alt"></i>
                 <h4>MISI</h4>
-                <p>Aktif bergerak karena air yang mengalir akan cenderung jernih, sedangkan air yang diam akan keruh tergenag, Menghimpun dan membentuk Sumber daya manusia yang dibekali Iman , profesional dan bertanggung jawab .</p>
+                <p>Aktif bergerak karena air yang mengalir akan cenderung jernih, sedangkan air yang diam akan keruh
+                  tergenag, Menghimpun dan membentuk Sumber daya manusia yang dibekali Iman , profesional dan
+                  bertanggung jawab .</p>
               </div>
             </div>
           </div>
@@ -146,8 +159,8 @@
     </section><!-- End About Section -->
 
     <!-- ======= Team Section ======= -->
-    <section id="struktur" class="team" data-aos="fade-left">
-      <div class="container">
+    <section id="struktur" class="team">
+      <div class="container" data-aos="fade-left">
 
         <div class="section-title">
           <h2>Struktur Organisasi</h2>
@@ -155,8 +168,8 @@
         </div>
 
         <div class="member">
-            <h4>Puspa Anggraeni</h4>
-            <span>Director</span>
+          <h4>Puspa Anggraeni</h4>
+          <span>Director</span>
         </div>
 
         <div class="row">
@@ -175,145 +188,145 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-3">
-              <div class="member">
-                <h4>Malika Rasifa Dewi</h4>
-                <span>Adm</span>
-              </div>
+          <div class="col-lg-3">
+            <div class="member">
+              <h4>Malika Rasifa Dewi</h4>
+              <span>Adm</span>
             </div>
-            <div class="col-lg-3">
-              <div class="member">
-                <h4>Erika</h4>
-                <span>Adm Support Marketing</span>
-              </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="member">
-                  <h4>Purwoko</h4>
-                  <span>Operational</span>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="member">
-                  <h4>Reza Apriliani</h4>
-                  <span>Cashier</span>
-                </div>
-              </div>
           </div>
+          <div class="col-lg-3">
+            <div class="member">
+              <h4>Erika</h4>
+              <span>Adm Support Marketing</span>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="member">
+              <h4>Purwoko</h4>
+              <span>Operational</span>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="member">
+              <h4>Reza Apriliani</h4>
+              <span>Cashier</span>
+            </div>
+          </div>
+        </div>
 
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="member">
-                <h4>Rifki Hidayatulloh</h4>
-                <p>Dulhak, Reza Pahlawan R, Edo Putra, Syamsul Lomri, M. Andre Maulana</p>
-                <span>Kordinator</span>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="member">
-                <h4>Djumadi</h4>
-                <span>Driver</span>
-                <br><br>
-              </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="member">
+              <h4>Rifki Hidayatulloh</h4>
+              <p>Dulhak, Reza Pahlawan R, Edo Putra, Syamsul Lomri, M. Andre Maulana</p>
+              <span>Kordinator</span>
             </div>
           </div>
+          <div class="col-lg-6">
+            <div class="member">
+              <h4>Djumadi</h4>
+              <span>Driver</span>
+              <br><br>
+            </div>
+          </div>
+        </div>
 
       </div>
     </section><!-- End Team Section -->
 
     <!-- ======= Team Section ======= -->
-    <section id="kerja" class="team section-bg" data-aos="fade-right">
-        <div class="container mb-5">
-  
-            <div class="section-title">
-              <h2>Rekan Kerjasama</h2>
-              <p>PT. MULTISARANA MEDHITAMA</p>
-            </div>
-    
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Traktor Nusantara</h4>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Swadaya Harapan Nusantara</h4>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Bina Pertiwi</h4>
-                </div>
-              </div>
-            </div>
+    <section id="kerja" class="team section-bg">
+      <div class="container mb-5" data-aos="fade-right">
 
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Gerbang Multindo Nusantara</h4>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Kasana Teknindo Gemilang</h4>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="member">
-                  <h4>PT. Petrosea</h4>
-                </div>
-              </div>
-            </div>
-    
+        <div class="section-title">
+          <h2>Rekan Kerjasama</h2>
+          <p>PT. MULTISARANA MEDHITAMA</p>
         </div>
 
-        <hr class="container" id="armada">
-
-        <div class="container">
-  
-          <div class="section-title">
-            <h2>Rekanan Armada</h2>
-            <p>PT. MULTISARANA MEDHITAMA</p>
-          </div>
-  
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="member">
-                <h4>PT. Harapan Mandiri Sejahtera ( HMS )</h4>
-                <span>Self Loader, Lowbed, Doliy</span>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="member">
-                <h4>Raya Indo AnugrahPT.</h4>
-                <span>Self Loader</span>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="member">
-                <h4>PT. Harapan Putra Kita</h4>
-                <span>Trailer, Fuso, Tronton</span>
-              </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Traktor Nusantara</h4>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-lg-6">
-                <div class="member">
-                  <h4>PT. Prabu Siliwangi</h4>
-                  <span>Self Loader</span>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="member">
-                  <h4>PT. Muara Mas</h4>
-                  <span>Self Loader, Lowbed, Dolly</span>
-                </div>
-              </div>
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Swadaya Harapan Nusantara</h4>
+            </div>
           </div>
-  
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Bina Pertiwi</h4>
+            </div>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Gerbang Multindo Nusantara</h4>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Kasana Teknindo Gemilang</h4>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Petrosea</h4>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="container" id="armada">
+
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Rekanan Armada</h2>
+          <p>PT. MULTISARANA MEDHITAMA</p>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Harapan Mandiri Sejahtera ( HMS )</h4>
+              <span>Self Loader, Lowbed, Doliy</span>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>Raya Indo AnugrahPT.</h4>
+              <span>Self Loader</span>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="member">
+              <h4>PT. Harapan Putra Kita</h4>
+              <span>Trailer, Fuso, Tronton</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="member">
+              <h4>PT. Prabu Siliwangi</h4>
+              <span>Self Loader</span>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="member">
+              <h4>PT. Muara Mas</h4>
+              <span>Self Loader, Lowbed, Dolly</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </section><!-- End Team Section -->
 
     <!-- ======= Contact Section ======= -->
@@ -330,22 +343,38 @@
 
             <div class="info-wrap">
               <div class="row">
-                <div class="col-lg-4 info">
+                <div class="col-lg-3 info mt-4 mt-lg-0">
+                  <i class="bi bi-phone"></i>
+                  <h4>Telepon:</h4>
+                  <p>6221-43800226 & 6221-43906389</p>
+                </div>
+
+                <div class="col-lg-3 info">
                   <i class="bi bi-geo-alt"></i>
                   <h4>Location:</h4>
                   <p>JI. Usaha No. 26A Kel. Kebon Bawang Kec. Tanjung Priok, Jakarta Utara</p>
                 </div>
 
-                <div class="col-lg-4 info mt-4 mt-lg-0">
+                <div class="col-lg-3 info mt-4 mt-lg-0">
                   <i class="bi bi-envelope"></i>
                   <h4>Operational Office</h4>
                   <p>JL Swasembada Timur VII No. 20A Kebon Bawang, Tanjung Priok, Jakarta Utara</p>
                 </div>
 
-                <div class="col-lg-4 info mt-4 mt-lg-0">
+                <div class="col-lg-3 info mt-4 mt-lg-0">
+
                   <i class="bi bi-phone"></i>
-                  <h4>Telepon:</h4>
-                  <p>6221-43800226 & 6221-43906389</p>
+                  <h4>Marketing:</h4>
+                  <p>
+                    <a href="{{ redirectToWhatsApp(" +6285311177930"); }}" target="_blank">
+                      +6285311177930 (Rossa)
+                    </a>
+                  </p>
+                  <p>
+                    <a href="{{ redirectToWhatsApp(" +6289695895358"); }}" target="_blank">
+                      +6289695895358 (Erika)
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>
@@ -359,53 +388,108 @@
 
     <!-- ======= Contact Section ======= -->
     <section id="resi" class="contact section-bg">
-        <div class="container">
-  
-          <div class="section-title">
-            <h2>Periksa Nomor Resi</h2>
-            <p>Periksa nomor resi untuk mengecek status pengiriman barang</p>
-          </div>
-  
-          <div class="row mt-5 justify-content-center">
-            <div class="col-lg-10">
-                <form action="/#resi" method="GET" role="form">
-                    <div class="form-group mt-3">
-                        <input type="search" class="form-control" name="search" id="search" placeholder="Masukkan nomor resi" value="{{ request('search') }}" required>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-info text-light rounded-1">Periksa</button>
-                    </div>
-                </form>                
-                @if ($barangs)
-                    @forelse($barangs as $barang)
-                        <ul class="list-group mt-3">
-                            <li class="list-group-item">Nomor resi : {{ $barang->nomor_resi }}</li>
-                            <li class="list-group-item">Barang : {{ Str::ucfirst($barang->nama_barang) }}</li>
-                            <li class="list-group-item">
-                                @if ($barang->is_sampai && !$barang->is_perjalanan)
-                                    Barang telah sampai dan diterima
-                                @elseif(!$barang->is_sampai && $barang->is_perjalanan)
-                                    Barang sedang dalam perjalanan dari {{ Str::ucfirst($barang->titikantar->kota) }}
-                                @elseif(!$barang->is_sampai && !$barang->is_perjalanan)
-                                    Posisi Barang : berada di checkpoint {{ Str::ucfirst($barang->titikantar->kota) }}
-                                @endif
-                            </li>
-                            <li class="list-group-item">Armada Kendaraan : {{ Str::ucfirst($barang->armada->nama_kendaraan) }} | {{ Str::upper($barang->armada->plat_nomor) }}</li>
-                            <li class="list-group-item">Tujuan Pengiriman : {{ Str::ucfirst($barang->lokasi_penerima) }}</li>
-                            <li class="list-group-item">Tanggal Kirim : {{ $barang->tanggal_pengiriman->format('d-m-Y') }}</li>
-                        </ul>
-                    @empty
-                        <li class="list-group-item list-group-item-danger">Barang tidak ditemukan</li>
-                    @endforelse
-                    <div class="text-center mt-3">
-                      <a href="/#resi" class="btn btn-info rounded-1 text-light">RESET</a>
-                    </div>
-                @endif
+      <div class="container">
 
-            </div>
-          </div>
-  
+        <div class="section-title">
+          <h2>Periksa Nomor Resi</h2>
+          <p>Periksa nomor resi untuk mengecek status pengiriman barang</p>
         </div>
+
+        <div class="row mt-5 justify-content-center">
+          <div class="col-lg-10">
+            <form action="/#resi" method="GET" role="form">
+              <div class="form-group mt-3">
+                <input type="search" class="form-control" name="search" id="search" placeholder="Masukkan nomor resi"
+                  value="{{ request('search') }}" required>
+              </div>
+              <div class="text-center mt-3">
+                <button type="submit" class="btn btn-info text-light rounded-1">Periksa</button>
+              </div>
+            </form>
+            @if ($barangs)
+            @forelse($barangs as $barang)
+            <ul class="list-group mt-3">
+              <li class="list-group-item">Nomor resi : {{ $barang->nomor_resi }}</li>
+              <li class="list-group-item">Barang : {{ Str::ucfirst($barang->nama_barang) }}</li>
+              <li class="list-group-item">
+                @if ($barang->is_sampai && !$barang->is_perjalanan)
+                Barang telah sampai dan diterima
+                @elseif(!$barang->is_sampai && $barang->is_perjalanan)
+                Barang sedang dalam perjalanan dari {{ Str::ucfirst($barang->titikantar->kota) }}
+                @elseif(!$barang->is_sampai && !$barang->is_perjalanan)
+                Posisi Barang : berada di checkpoint {{ Str::ucfirst($barang->titikantar->kota) }}
+                @endif
+              </li>
+              <li class="list-group-item">Armada Kendaraan : {{ Str::ucfirst($barang->armada->nama_kendaraan) }} | {{
+                Str::upper($barang->armada->plat_nomor) }}</li>
+              <li class="list-group-item">Tujuan Pengiriman : {{ Str::ucfirst($barang->lokasi_penerima) }}</li>
+              <li class="list-group-item">Tanggal Kirim : {{ $barang->tanggal_pengiriman->format('d-m-Y') }}</li>
+            </ul>
+            <!-- Modal -->
+            <hr>
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title mt-3 text-center" id="lihatModalLabel"><strong>Log
+                      Aktifitas Barang</strong></h5>
+                </div>
+                <style>
+                  .timeline {
+                    border-left: 1px solid hsl(0, 0%, 90%);
+                    position: relative;
+                    list-style: none;
+                  }
+
+                  .timeline .timeline-item {
+                    position: relative;
+                  }
+
+                  .timeline .timeline-item:after {
+                    position: absolute;
+                    display: block;
+                    top: 0;
+                  }
+
+                  .timeline .timeline-item:after {
+                    background-color: hsl(0, 0%, 90%);
+                    left: -38px;
+                    border-radius: 50%;
+                    height: 11px;
+                    width: 11px;
+                    content: "";
+                  }
+                </style>
+                <div class="modal-body" style="margin-top: -3%">
+                  <section>
+                    <ul class="timeline">
+                      @foreach ($logbarang as $log)
+                      @if ($log->barang_id == $barang->id)
+                      <li class="timeline-item mb-3">
+                        <h6 class="fw-bold">
+                          {{ $log->status_pengiriman }}
+                        </h6>
+                        <p class="text-muted d-inline">{{ $log->created_at }}</p>
+                      </li>
+                      @endif
+                      @endforeach
+                    </ul>
+                    <hr>
+                  </section>
+                </div>
+              </div>
+            </div>
+            @empty
+            <li class="list-group-item list-group-item-danger">Barang tidak ditemukan</li>
+            @endforelse
+            <div class="text-center">
+              <a href="/#resi" class="btn btn-info rounded-1 text-light">RESET</a>
+            </div>
+            @endif
+
+          </div>
+        </div>
+
+      </div>
     </section><!-- End Contact Section -->
 
   </main><!-- End #main -->
@@ -420,7 +504,7 @@
           <div class="col-lg-8 col-md-6 footer-contact">
             <h3>PT. MULTISARANA MEDHITAMA</h3>
             <p>
-            JI. Usaha No. 26A Kel. Kebon Bawang Kec. Tanjung Priok, Jakarta Utara <br>
+              JI. Usaha No. 26A Kel. Kebon Bawang Kec. Tanjung Priok, Jakarta Utara <br>
               <strong>Telepon: </strong>6221-43800226 & 6221-43906389<br>
             </p>
           </div>
@@ -452,7 +536,8 @@
 
       <div class="me-md-auto text-center text-md-start">
         <div class="copyright">
-          &copy; Copyright <strong><span>Lumia</span></strong>. All Rights Reserved. Regards, <strong><span>RuanginTech</span></strong>.
+          &copy; Copyright <strong><span>Lumia</span></strong>. All Rights Reserved. Regards,
+          <strong><span>RuanginTech</span></strong>.
         </div>
         <div class="credits">
           <!-- All the links in the footer should remain intact. -->
@@ -472,7 +557,8 @@
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="{{ asset('/home-assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>

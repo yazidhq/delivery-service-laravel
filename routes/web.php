@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Barang;
+use App\Models\LogBarang;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -29,10 +30,8 @@ Route::get('/', function () {
     $search = request('search');
     $barangs = $search ? Barang::where('nomor_resi', 'like', '%' . $search . '%')->get() : [];
 
-    return view('home', ['barangs' => $barangs]);
+    return view('home', ['barangs' => $barangs, 'logbarang' => LogBarang::orderBy('id', 'DESC')->get()]);
 })->name('index');
-
-
 
 // resource all of controller
 Route::resource('/barang', BarangController::class)->middleware('auth');
@@ -49,10 +48,14 @@ Route::put('/update-titik-antar/{id}', [BarangController::class, 'updateTitikAnt
 Route::put('/update-status/{id}', [BarangController::class, 'updateStatus'])->name('update-status')->middleware('auth');
 
 // creating pdf surat jalan barang
-Route::get('/surat-jalan/{id}', [BarangController::class, 'generateSuratJalan'])->name('surat-jalan');
+Route::get('/surat-jalan/{id}', [BarangController::class, 'generateSuratJalan'])->name('surat-jalan')->middleware('auth');
 
 // export barang to excel
-Route::get('/export-barang-excel', [BarangController::class, 'exportToExcel'])->name('export-barang-excel');
+Route::get('/export-barang-excel', [BarangController::class, 'exportToExcel'])->name('export-barang-excel')->middleware('auth');
+
+// log barang
+Route::delete('/singleLog/{id}', [BarangController::class, 'hapusSingleLog'])->name('singleLog.destroy')->middleware('auth');
+Route::delete('/allLog/{id}', [BarangController::class, 'hapusAllLog'])->name('allLog.destroy')->middleware('auth');
 
 // authentication
 Route::controller(AuthenticateController::class)->group(function () {

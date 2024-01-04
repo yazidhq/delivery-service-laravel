@@ -12,7 +12,7 @@ class ArmadaController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = [
                 'armadas' => Armada::all(),
             ];
@@ -34,13 +34,13 @@ class ArmadaController extends Controller
      */
     public function store(Request $request)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_kendaraan' => 'required',
                 'plat_nomor' => 'required'
             ]);
             Armada::create($data);
-            return redirect()->route('armada.index')->with(['success' => 'Berhasil menambah Armada Kendaraan']);
+            return redirect()->back()->with(['successArmada' => 'Berhasil menambah Armada Kendaraan']);
         }
         return redirect()->route('dashboard');
     }
@@ -66,7 +66,7 @@ class ArmadaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'nama_kendaraan' => 'required',
                 'plat_nomor' => 'required'
@@ -82,7 +82,7 @@ class ArmadaController extends Controller
      */
     public function destroy(string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $armada = Armada::where('id', $id)->firstOrFail();
             foreach ($armada->barang as $barang) {
                 $barang->delete();

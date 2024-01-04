@@ -12,7 +12,7 @@ class TitikAntarController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = [
                 'titikantars' => TitikAntar::all(),
             ];
@@ -34,7 +34,7 @@ class TitikAntarController extends Controller
      */
     public function store(Request $request)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'kota' => 'required',
                 'kode_pos' => 'required',
@@ -45,7 +45,7 @@ class TitikAntarController extends Controller
 
             TitikAntar::create($data);
 
-            return redirect()->route('titikantar.index')->with(['success' => 'Berhasil menambah Titik Antar (Check Point)']);
+            return redirect()->back()->with(['successTitikAntar' => 'Berhasil menambah Titik Antar (Check Point)']);
         }
         return redirect()->route('dashboard');
     }
@@ -71,7 +71,7 @@ class TitikAntarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $data = $this->validate($request, [
                 'kota' => 'required',
                 'kode_pos' => 'required',
@@ -92,7 +92,7 @@ class TitikAntarController extends Controller
      */
     public function destroy(string $id)
     {
-        if(auth()->user()->role->nama == 'admin'){
+        if (auth()->user()->role->nama == 'admin') {
             $titikantar = TitikAntar::where('id', $id)->firstOrFail();
             foreach ($titikantar->barang as $barang) {
                 $barang->delete();
